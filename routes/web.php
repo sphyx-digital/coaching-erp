@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReceiptController;
 use App\Livewire\Admissions\AdmissionsManager;
+use App\Livewire\Attendance\AttendanceRegister;
 use App\Livewire\Batches\BatchManager;
 use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admissions', AdmissionsManager::class)->name('admissions');
     Route::get('/batches', BatchManager::class)->name('batches');
     Route::get('/timetable', TimetableManager::class)->name('timetable');
+    Route::get('/attendance', AttendanceRegister::class)->name('attendance');
 
     Route::get('/fees', BillingManager::class)->name('fees');
     Route::get('/fees/setup', FeeSetupManager::class)->name('fees.setup');

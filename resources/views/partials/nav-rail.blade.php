@@ -30,6 +30,11 @@
         <a class="nav-rail__link" href="{{ url('/timetable') }}" @if(request()->is('timetable')) aria-current="page" @endif>Timetable</a>
     @endif
 
+    @if ($u?->can('attendance.view'))
+        <div class="nav-rail__section">Attendance</div>
+        <a class="nav-rail__link" href="{{ url('/attendance') }}" @if(request()->is('attendance')) aria-current="page" @endif>Register</a>
+    @endif
+
     @if ($u?->can('fee.view'))
         <div class="nav-rail__section">Finance</div>
         <a class="nav-rail__link" href="{{ url('/fees') }}" @if(request()->is('fees')) aria-current="page" @endif>Fees & payments</a>
@@ -37,7 +42,6 @@
     @endif
 
     <div class="nav-rail__section">Coming online by phase</div>
-    <a class="nav-rail__link" href="#" aria-disabled="true">Attendance</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Assessments</a>
 
     @if ($u?->hasAllBranchAccess())
