@@ -17,6 +17,7 @@ class Enrollment extends Model
     protected $casts = [
         'enrolled_on' => 'date',
         'withdrawn_on' => 'date',
+        'status' => \App\Enums\EnrollmentStatus::class,
     ];
 
     public function institute(): BelongsTo

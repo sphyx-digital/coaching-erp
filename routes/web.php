@@ -1,6 +1,8 @@
 <?php
 
+use App\Livewire\Admissions\AdmissionsManager;
 use App\Livewire\Branches\BranchManager;
+use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
@@ -17,9 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
 
     Route::get('/enquiries', EnquiryManager::class)->name('enquiries');
+    Route::get('/admissions', AdmissionsManager::class)->name('admissions');
 
     Route::get('/settings', SettingsManager::class)->name('settings');
     Route::get('/branches', BranchManager::class)->name('branches');
+    Route::get('/courses', CourseSubjectManager::class)->name('courses');
     Route::get('/sessions', SessionManager::class)->name('sessions');
     Route::get('/staff', StaffManager::class)->name('staff');
 

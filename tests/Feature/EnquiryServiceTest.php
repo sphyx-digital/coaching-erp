@@ -88,7 +88,7 @@ class EnquiryServiceTest extends TestCase
 
         $enrollment = $this->service()->convert($enquiry);
 
-        $this->assertSame('provisional', $enrollment->status);
+        $this->assertSame('provisional', $enrollment->status->value);
         $this->assertSame(EnquiryStatus::Converted, $enquiry->fresh()->status);
         $this->assertNotNull($enquiry->fresh()->converted_student_id);
 
