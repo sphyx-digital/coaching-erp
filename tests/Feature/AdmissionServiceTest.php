@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\Course;
 use App\Models\Guardian;
 use App\Models\Institute;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\Admissions\AdmissionService;
@@ -21,8 +22,11 @@ class AdmissionServiceTest extends TestCase
     use RefreshDatabase;
 
     private Institute $institute;
+
     private Branch $branch;
+
     private AcademicSession $session;
+
     private Course $course;
 
     protected function setUp(): void
@@ -42,7 +46,7 @@ class AdmissionServiceTest extends TestCase
     private function staffUser(string $role): User
     {
         $user = User::factory()->create();
-        \App\Models\Staff::create([
+        Staff::create([
             'user_id' => $user->id,
             'institute_id' => $this->institute->id,
             'branch_id' => $this->branch->id,

@@ -16,18 +16,28 @@ class EnquiryManager extends Component
 {
     // Create form
     public string $name = '';
+
     public string $phone = '';
+
     public string $email = '';
+
     public string $guardian_name = '';
+
     public string $guardian_phone = '';
+
     public string $source = '';
+
     public ?int $branch_id = null;
+
     public ?int $course_id = null;
 
     // Action panel (follow-up note or lost reason)
     public ?int $panelId = null;
+
     public string $panelMode = '';   // note | lost
+
     public string $panelText = '';
+
     public ?string $panelFollowUp = null;
 
     public function mount(): void

@@ -20,23 +20,36 @@ class AdmissionsManager extends Component
 {
     // New admission - student
     public string $s_name = '';
+
     public ?string $s_dob = null;
+
     public string $s_gender = '';
+
     public string $s_phone = '';
+
     public string $s_email = '';
+
     public ?int $s_branch_id = null;
+
     // Guardian
     public string $g_name = '';
+
     public string $g_relation = '';
+
     public string $g_phone = '';
+
     // Enrollment + consent
     public ?int $course_id = null;
+
     public bool $consent_data = true;
+
     public bool $consent_comm = true;
 
     // Panels
     public ?int $withdrawId = null;
+
     public string $withdrawReason = '';
+
     public ?int $profileId = null;
 
     public function mount(): void

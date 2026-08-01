@@ -11,7 +11,7 @@ class ClientServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(ClientSettings::class, fn () => new ClientSettings());
+        $this->app->singleton(ClientSettings::class, fn () => new ClientSettings);
     }
 
     public function boot(): void

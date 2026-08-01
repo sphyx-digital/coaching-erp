@@ -19,7 +19,7 @@ class NumberingServiceTest extends TestCase
     public function test_numbers_are_unique_and_gapless(): void
     {
         $institute = Institute::create(['name' => 'Acme']);
-        $service = new NumberingService();
+        $service = new NumberingService;
 
         $numbers = [];
         for ($i = 0; $i < 25; $i++) {
@@ -36,7 +36,7 @@ class NumberingServiceTest extends TestCase
         $institute = Institute::create(['name' => 'Acme']);
         $a = Branch::create(['institute_id' => $institute->id, 'name' => 'A', 'code' => 'A']);
         $b = Branch::create(['institute_id' => $institute->id, 'name' => 'B', 'code' => 'B']);
-        $service = new NumberingService();
+        $service = new NumberingService;
 
         $a1 = $service->next($institute->id, 'invoice', $a->id);
         $a2 = $service->next($institute->id, 'invoice', $a->id);

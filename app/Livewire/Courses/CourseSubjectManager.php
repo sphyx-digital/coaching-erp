@@ -12,11 +12,15 @@ use Livewire\Component;
 class CourseSubjectManager extends Component
 {
     public string $courseName = '';
+
     public string $courseCode = '';
+
     public ?int $courseDuration = null;
 
     public string $subjectName = '';
+
     public string $subjectCode = '';
+
     public ?int $subjectCourseId = null;
 
     public function mount(): void

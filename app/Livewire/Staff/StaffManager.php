@@ -20,8 +20,11 @@ class StaffManager extends Component
     public const STAFF_ROLES = ['Institute Admin', 'Branch Admin', 'Counsellor', 'Teacher', 'Accountant'];
 
     public string $name = '';
+
     public string $email = '';
+
     public string $role = 'Teacher';
+
     public ?int $branch_id = null;
 
     public function mount(): void

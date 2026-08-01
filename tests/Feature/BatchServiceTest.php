@@ -19,8 +19,11 @@ class BatchServiceTest extends TestCase
     use RefreshDatabase;
 
     private Institute $institute;
+
     private Branch $branch;
+
     private Course $course;
+
     private AcademicSession $session;
 
     protected function setUp(): void

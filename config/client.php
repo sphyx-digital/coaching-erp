@@ -25,28 +25,28 @@ return [
 
     // Institute identity
     'institute_name' => env('CLIENT_NAME', 'Coaching Institute'),
-    'gstin'          => env('CLIENT_GSTIN', ''),
-    'logo'           => env('CLIENT_LOGO', ''), // URL or storage path; empty = initial monogram
+    'gstin' => env('CLIENT_GSTIN', ''),
+    'logo' => env('CLIENT_LOGO', ''), // URL or storage path; empty = initial monogram
 
     // Branding (two-token model)
-    'brand_hue'    => env('CLIENT_BRAND_HUE', '#6366f1'),
+    'brand_hue' => env('CLIENT_BRAND_HUE', '#6366f1'),
     'action_color' => env('CLIENT_ACTION_COLOR', '#4338ca'),
 
     // Reject an inaccessible action colour at boot (WCAG AA vs white text).
     'enforce_contrast' => env('CLIENT_ENFORCE_CONTRAST', true),
 
     // Locale
-    'currency'      => env('CLIENT_CURRENCY', 'INR'),
+    'currency' => env('CLIENT_CURRENCY', 'INR'),
     'currency_sign' => '₹',
-    'timezone'      => env('CLIENT_TIMEZONE', 'Asia/Kolkata'), // display tz; storage is UTC
+    'timezone' => env('CLIENT_TIMEZONE', 'Asia/Kolkata'), // display tz; storage is UTC
 
     // Feature flags (read through feature()). A missing flag is treated as off.
     'features' => [
         'online_payments' => env('FEATURE_ONLINE_PAYMENTS', false),
-        'whatsapp'        => env('FEATURE_WHATSAPP', false),
-        'sms'             => env('FEATURE_SMS', false),
-        'email'           => env('FEATURE_EMAIL', true),
-        'parent_portal'   => env('FEATURE_PARENT_PORTAL', true),
+        'whatsapp' => env('FEATURE_WHATSAPP', false),
+        'sms' => env('FEATURE_SMS', false),
+        'email' => env('FEATURE_EMAIL', true),
+        'parent_portal' => env('FEATURE_PARENT_PORTAL', true),
     ],
 
 ];

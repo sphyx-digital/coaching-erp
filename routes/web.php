@@ -6,9 +6,9 @@ use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Sessions\SessionManager;
-use App\Livewire\Timetable\TimetableManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
+use App\Livewire\Timetable\TimetableManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('home'))->name('home');

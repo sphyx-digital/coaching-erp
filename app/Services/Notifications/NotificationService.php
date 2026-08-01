@@ -16,7 +16,7 @@ class NotificationService
     public function driver(string $channel): NotificationChannel
     {
         return match ($channel) {
-            'in_app' => new InAppChannel(),
+            'in_app' => new InAppChannel,
             'whatsapp', 'sms', 'email' => new StubChannel($channel),
             default => new StubChannel($channel),
         };

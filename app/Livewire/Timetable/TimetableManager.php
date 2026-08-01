@@ -20,15 +20,22 @@ class TimetableManager extends Component
 
     #[Url]
     public ?int $batch = null;            // selected batch id (also the view target in batch mode)
+
     public ?int $viewTeacher = null;
+
     public ?int $viewRoom = null;
 
     // Add-slot form
     public ?int $day_of_week = 1;
+
     public ?string $start_time = null;
+
     public ?string $end_time = null;
+
     public ?int $subject_id = null;
+
     public ?int $teacher_id = null;
+
     public ?int $classroom_id = null;
 
     public const DAYS = [1 => 'Mon', 2 => 'Tue', 3 => 'Wed', 4 => 'Thu', 5 => 'Fri', 6 => 'Sat', 0 => 'Sun'];

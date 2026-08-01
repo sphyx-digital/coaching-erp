@@ -11,8 +11,11 @@ use Livewire\Component;
 class BranchManager extends Component
 {
     public ?int $editingId = null;
+
     public string $name = '';
+
     public string $code = '';
+
     public string $city = '';
 
     public function mount(): void

@@ -19,8 +19,11 @@ class EnquiryServiceTest extends TestCase
     use RefreshDatabase;
 
     private Institute $institute;
+
     private Branch $branch;
+
     private AcademicSession $session;
+
     private Course $course;
 
     protected function setUp(): void

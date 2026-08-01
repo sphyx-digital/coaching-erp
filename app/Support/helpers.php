@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\AcademicSession;
+use App\Models\Institute;
 use App\Support\ClientSettings;
 
 if (! function_exists('client_settings')) {
@@ -36,9 +38,9 @@ if (! function_exists('current_institute')) {
     /**
      * The single institute for this instance (one institute per client).
      */
-    function current_institute(): ?\App\Models\Institute
+    function current_institute(): ?Institute
     {
-        return \App\Models\Institute::query()->orderBy('id')->first();
+        return Institute::query()->orderBy('id')->first();
     }
 }
 
@@ -46,9 +48,9 @@ if (! function_exists('active_session')) {
     /**
      * The active academic session for this instance.
      */
-    function active_session(): ?\App\Models\AcademicSession
+    function active_session(): ?AcademicSession
     {
-        return \App\Models\AcademicSession::query()->where('is_active', true)->orderByDesc('id')->first();
+        return AcademicSession::query()->where('is_active', true)->orderByDesc('id')->first();
     }
 }
 

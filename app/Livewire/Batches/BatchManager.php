@@ -17,15 +17,22 @@ use Livewire\Component;
 class BatchManager extends Component
 {
     public string $name = '';
+
     public string $code = '';
+
     public int $capacity = 30;
+
     public ?int $course_id = null;
+
     public ?int $teacher_id = null;
+
     public ?int $classroom_id = null;
 
     // assignment / move
     public array $assignTo = [];   // enrollmentId => batchId
+
     public ?int $moveId = null;
+
     public ?int $moveTo = null;
 
     public function mount(): void

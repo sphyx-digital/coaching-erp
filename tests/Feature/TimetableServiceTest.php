@@ -20,10 +20,15 @@ class TimetableServiceTest extends TestCase
     use RefreshDatabase;
 
     private Institute $institute;
+
     private Branch $branch;
+
     private Batch $batchA;
+
     private Batch $batchB;
+
     private Staff $teacher;
+
     private Classroom $room;
 
     protected function setUp(): void

@@ -13,8 +13,11 @@ use Livewire\Component;
 class SettingsManager extends Component
 {
     public string $institute_name = '';
+
     public string $gstin = '';
+
     public string $brand_hue = '#6366f1';
+
     public string $action_color = '#4338ca';
 
     /** @var array<string,bool> */

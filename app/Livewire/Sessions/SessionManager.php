@@ -12,7 +12,9 @@ use Livewire\Component;
 class SessionManager extends Component
 {
     public string $name = '';
+
     public ?string $starts_on = null;
+
     public ?string $ends_on = null;
 
     public function mount(): void

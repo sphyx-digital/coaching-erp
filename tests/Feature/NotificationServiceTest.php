@@ -14,7 +14,7 @@ class NotificationServiceTest extends TestCase
     public function test_in_app_dispatch_writes_message_log_and_notification(): void
     {
         $user = User::factory()->create();
-        $service = new NotificationService();
+        $service = new NotificationService;
 
         $log = $service->toUser($user->id, 'Fees due', 'Your installment is due.');
 
@@ -26,7 +26,7 @@ class NotificationServiceTest extends TestCase
 
     public function test_stubbed_channel_logs_queued_without_failing(): void
     {
-        $service = new NotificationService();
+        $service = new NotificationService;
 
         $log = $service->dispatch('whatsapp', [
             'recipient' => '+919999999999',

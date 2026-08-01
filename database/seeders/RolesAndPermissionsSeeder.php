@@ -14,14 +14,14 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     /** Permission set grouped by module. */
     public const MODULES = [
-        'enquiry'    => ['view', 'create', 'update', 'delete'],
-        'admission'  => ['view', 'create', 'update', 'delete', 'approve'],
-        'batch'      => ['view', 'create', 'update', 'delete'],
-        'fee'        => ['view', 'create', 'update', 'delete', 'approve'],
+        'enquiry' => ['view', 'create', 'update', 'delete'],
+        'admission' => ['view', 'create', 'update', 'delete', 'approve'],
+        'batch' => ['view', 'create', 'update', 'delete'],
+        'fee' => ['view', 'create', 'update', 'delete', 'approve'],
         'attendance' => ['view', 'create', 'update', 'delete'],
         'assessment' => ['view', 'create', 'update', 'delete', 'approve'],
-        'report'     => ['view'],
-        'settings'   => ['view', 'update'],
+        'report' => ['view'],
+        'settings' => ['view', 'update'],
     ];
 
     public function run(): void
@@ -39,20 +39,20 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $map = [
             // Platform Admin is a super-admin via Gate::before, and also holds all perms.
-            'Platform Admin'  => $all,
+            'Platform Admin' => $all,
             'Institute Admin' => $all,
             // Branch Admin: everything except changing settings (scoped to a branch).
-            'Branch Admin'    => array_values(array_diff($all, ['settings.update'])),
-            'Counsellor'      => ['enquiry.view', 'enquiry.create', 'enquiry.update', 'enquiry.delete',
-                                  'admission.view', 'admission.create', 'admission.update', 'report.view'],
-            'Teacher'         => ['batch.view', 'attendance.view', 'attendance.create', 'attendance.update',
-                                  'attendance.delete', 'assessment.view', 'assessment.create',
-                                  'assessment.update', 'report.view'],
-            'Accountant'      => ['fee.view', 'fee.create', 'fee.update', 'fee.delete', 'fee.approve',
-                                  'report.view'],
+            'Branch Admin' => array_values(array_diff($all, ['settings.update'])),
+            'Counsellor' => ['enquiry.view', 'enquiry.create', 'enquiry.update', 'enquiry.delete',
+                'admission.view', 'admission.create', 'admission.update', 'report.view'],
+            'Teacher' => ['batch.view', 'attendance.view', 'attendance.create', 'attendance.update',
+                'attendance.delete', 'assessment.view', 'assessment.create',
+                'assessment.update', 'report.view'],
+            'Accountant' => ['fee.view', 'fee.create', 'fee.update', 'fee.delete', 'fee.approve',
+                'report.view'],
             // Portal roles hold no module permissions; ownership policies govern them.
-            'Student'         => [],
-            'Parent'          => [],
+            'Student' => [],
+            'Parent' => [],
         ];
 
         foreach ($map as $roleName => $permissions) {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnrollmentStatus;
 use App\Support\Access\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ class Enrollment extends Model
     protected $casts = [
         'enrolled_on' => 'date',
         'withdrawn_on' => 'date',
-        'status' => \App\Enums\EnrollmentStatus::class,
+        'status' => EnrollmentStatus::class,
     ];
 
     public function institute(): BelongsTo
