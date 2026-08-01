@@ -7,11 +7,11 @@
     <x-card title="New admission">
         <form wire:submit="admit">
             <h3 style="font-size: var(--text-sm); color: var(--text-muted); margin-bottom: var(--space-3);">Student</h3>
+            <x-name-fields field="s" label="Student name" :required="true" />
             <div class="grid-cards">
-                <x-field name="s_name" label="Full name" wire:model="s_name" required />
                 <x-field name="s_dob" label="Date of birth" type="date" wire:model.live="s_dob" />
                 <x-field name="s_gender" label="Gender" wire:model="s_gender" />
-                <x-field name="s_phone" label="Phone" wire:model="s_phone" />
+                <x-phone-field field="s_phone" dial-field="s_dial" label="Phone" />
                 <x-field name="s_email" label="Email" type="email" wire:model="s_email" />
                 <x-select name="s_branch_id" label="Branch" :options="$branches->toArray()" placeholder="Select branch" wire:model="s_branch_id" required />
             </div>
@@ -19,15 +19,15 @@
             <h3 style="font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-4) 0 var(--space-3);">
                 Guardian @if ($this->isMinor)<x-pill variant="warning">Required (minor)</x-pill>@endif
             </h3>
+            <x-name-fields field="g" label="Guardian name" />
             <div class="grid-cards">
-                <x-field name="g_name" label="Guardian name" wire:model="g_name" :required="$this->isMinor" />
                 <x-field name="g_relation" label="Relation" wire:model="g_relation" hint="father, mother, guardian" />
-                <x-field name="g_phone" label="Guardian phone" wire:model="g_phone" />
+                <x-phone-field field="g_phone" dial-field="g_dial" label="Guardian phone" />
             </div>
 
             <h3 style="font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-4) 0 var(--space-3);">Course and consent</h3>
             <div class="grid-cards">
-                <x-select name="course_id" label="Course" :options="$courses->toArray()" placeholder="Select course" wire:model="course_id" required />
+                <x-combobox label="Course" :options="$courses->toArray()" wire:model="course_id" placeholder="Search course…" />
             </div>
             <div style="display:flex; flex-direction:column; gap: var(--space-2); margin-top: var(--space-3);">
                 <label style="display:flex; align-items:center; gap: var(--space-2); min-height: var(--tap-min);">

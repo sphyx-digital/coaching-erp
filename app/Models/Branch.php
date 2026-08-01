@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Branch extends Model
 {
@@ -15,7 +16,34 @@ class Branch extends Model
 
     protected $guarded = ['id'];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_published' => 'boolean',
+        'established_on' => 'date',
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
+        'gallery' => 'array',
+        'amenities' => 'array',
+        'highlights' => 'array',
+        'social' => 'array',
+        'opening_hours' => 'array',
+    ];
+
+    protected static function booted(): void
+    {
+        // Keep a URL-safe slug for the public website.
+        static::saving(function (Branch $branch) {
+            if (! $branch->slug && $branch->name) {
+                $branch->slug = Str::slug($branch->name);
+            }
+        });
+    }
+
+    /** One-line address for lists and cards. */
+    public function shortAddress(): string
+    {
+        return collect([$this->locality, $this->city, $this->state])->filter()->implode(', ');
+    }
 
     public function institute(): BelongsTo
     {

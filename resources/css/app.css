@@ -140,6 +140,41 @@ a { color: var(--action); text-underline-offset: 2px; }
 .toolbar .input { max-width: 260px; min-height: 38px; }
 .chip { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 32px; padding: 0 var(--space-3); border: 1px solid var(--border-strong); border-radius: var(--radius-pill); background: var(--surface); color: var(--text-muted); font-size: var(--text-sm); cursor: pointer; }
 .chip[aria-pressed="true"], .chip.is-active { background: var(--action); border-color: var(--action); color: var(--on-action); }
+.chip__check { font-weight: 700; }
+
+[x-cloak] { display: none !important; }
+
+/* ---- Modal (modal-first CRUD, server-side via Livewire) ---- */
+.modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(21,24,33,0.5); display: grid; place-items: start center; padding: var(--space-5) var(--space-4); overflow-y: auto; }
+.modal { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--elev-3); width: 100%; max-width: 720px; max-height: calc(100vh - 2 * var(--space-5)); display: flex; flex-direction: column; animation: modalIn var(--motion-base) var(--ease-out); }
+.modal--wide { max-width: 920px; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .modal { animation: none; } }
+.modal__head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-4); border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.modal__title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); }
+.modal__close { width: 32px; height: 32px; display: grid; place-items: center; border: 0; background: transparent; color: var(--text-muted); font-size: 22px; cursor: pointer; border-radius: var(--radius-sm); }
+.modal__close:hover { background: var(--surface-sunken); color: var(--text); }
+.modal__body { padding: var(--space-4); overflow-y: auto; }
+.modal__foot { padding: var(--space-4); border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: var(--space-2); position: sticky; bottom: 0; background: var(--surface); }
+
+/* Form sections inside modals */
+.form-section { margin-bottom: var(--space-4); }
+.form-section__title { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: var(--space-2); margin-bottom: var(--space-3); }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-3); }
+.form-grid--3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 640px) { .form-grid--3 { grid-template-columns: 1fr; } }
+
+/* ---- Combobox (live-search dropdown) ---- */
+.combobox { position: relative; }
+.combobox__list { position: absolute; z-index: 20; top: calc(100% + 4px); left: 0; right: 0; max-height: 260px; overflow-y: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md); box-shadow: var(--elev-2); padding: 4px; }
+.combobox__opt { padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); cursor: pointer; font-size: var(--text-sm); }
+.combobox__opt:hover, .combobox__opt.is-active { background: var(--surface-sunken); }
+.combobox__empty { padding: var(--space-3); color: var(--text-muted); font-size: var(--text-sm); }
+
+/* Split name / phone rows */
+.name-row { display: grid; grid-template-columns: 90px 1fr 1fr 1fr; gap: var(--space-2); }
+@media (max-width: 640px) { .name-row { grid-template-columns: 1fr 1fr; } }
+.phone-row { display: grid; grid-template-columns: 96px 1fr; gap: var(--space-2); }
 
 /* ---- KPI card ---- */
 .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); box-shadow: var(--elev-1); }
