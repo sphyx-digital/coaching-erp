@@ -1,9 +1,35 @@
+# ---------------------------------------------------------------------------
+# Sphyx security hardening (defense in depth; app code lives outside this dir)
+# ---------------------------------------------------------------------------
+Options -Indexes -MultiViews
+ServerSignature Off
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    # HSTS for this host (HTTPS is always available via AutoSSL)
+    Header always set Strict-Transport-Security "max-age=15552000"
+    # Do not leak the PHP version / stack
+    Header always unset X-Powered-By
+</IfModule>
+
+# Block sensitive files if they ever land in the web root.
+<FilesMatch "(^\.env|\.env\..*|composer\.(json|lock)|package(-lock)?\.json|\.gitignore|\.htaccess|\.htpasswd|\.(bak|config|sql|sh|log|ini|yml|yaml)$)">
+    Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
+
+    # Deny any dotfile / dot-directory except the ACME challenge (AutoSSL).
+    RewriteRule "(^|/)\.(?!well-known)" - [F]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -25,7 +51,7 @@
 </IfModule>
 
 # php -- BEGIN cPanel-generated handler, do not edit
-# Set the “ea-php82” package as the default “PHP” programming language.
+# Set the "ea-php82" package as the default "PHP" programming language.
 <IfModule mime_module>
   AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
 </IfModule>
