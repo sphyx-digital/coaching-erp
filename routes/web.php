@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Branches\BranchManager;
+use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
@@ -14,6 +15,8 @@ Route::get('/up', fn () => response()->json(['status' => 'ok', 'phase' => 3]))->
 // Authenticated back office (modules light up phase by phase).
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+
+    Route::get('/enquiries', EnquiryManager::class)->name('enquiries');
 
     Route::get('/settings', SettingsManager::class)->name('settings');
     Route::get('/branches', BranchManager::class)->name('branches');

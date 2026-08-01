@@ -14,8 +14,12 @@
 
     <a class="nav-rail__link" href="{{ auth()->check() ? url('/dashboard') : url('/') }}" @if(request()->is('dashboard') || request()->is('/')) aria-current="page" @endif>Dashboard</a>
 
+    @if ($u?->can('enquiry.view'))
+        <div class="nav-rail__section">Admissions funnel</div>
+        <a class="nav-rail__link" href="{{ url('/enquiries') }}" @if(request()->is('enquiries')) aria-current="page" @endif>Enquiries</a>
+    @endif
+
     <div class="nav-rail__section">Coming online by phase</div>
-    <a class="nav-rail__link" href="#" aria-disabled="true">Enquiries</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Admissions</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Batches</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Fees</a>
