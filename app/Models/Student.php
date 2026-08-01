@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\Access\BelongsToBranch;
+use App\Support\Audit\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
-    use BelongsToBranch, HasFactory;
+    use Auditable, BelongsToBranch, HasFactory;
 
     protected $guarded = ['id'];
 

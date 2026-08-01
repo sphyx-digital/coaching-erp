@@ -28,7 +28,11 @@
         </header>
 
         <main class="app-content" id="main">
-            @yield('content')
+            @hasSection('content')
+                @yield('content')
+            @else
+                {{ $slot ?? '' }}
+            @endif
         </main>
     </div>
 </div>

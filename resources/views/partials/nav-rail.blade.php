@@ -1,4 +1,5 @@
 {{-- App shell navigation rail. Modules light up phase by phase. --}}
+@php($u = auth()->user())
 <nav class="nav-rail" aria-label="Main">
     <div class="nav-rail__brand">
         <span class="nav-rail__logo" aria-hidden="true">
@@ -11,7 +12,7 @@
         <span class="nav-rail__name">{{ $branding['name'] }}</span>
     </div>
 
-    <a class="nav-rail__link" href="{{ url('/') }}" aria-current="page">Dashboard</a>
+    <a class="nav-rail__link" href="{{ auth()->check() ? url('/dashboard') : url('/') }}" @if(request()->is('dashboard') || request()->is('/')) aria-current="page" @endif>Dashboard</a>
 
     <div class="nav-rail__section">Coming online by phase</div>
     <a class="nav-rail__link" href="#" aria-disabled="true">Enquiries</a>
@@ -21,6 +22,16 @@
     <a class="nav-rail__link" href="#" aria-disabled="true">Attendance</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Assessments</a>
 
-    <div class="nav-rail__section">System</div>
-    <a class="nav-rail__link" href="#" aria-disabled="true">Settings</a>
+    @if ($u?->hasAllBranchAccess())
+        <div class="nav-rail__section">Organisation</div>
+        <a class="nav-rail__link" href="{{ url('/branches') }}" @if(request()->is('branches')) aria-current="page" @endif>Branches</a>
+        <a class="nav-rail__link" href="{{ url('/sessions') }}" @if(request()->is('sessions')) aria-current="page" @endif>Sessions</a>
+        <a class="nav-rail__link" href="{{ url('/staff') }}" @if(request()->is('staff')) aria-current="page" @endif>Staff</a>
+    @endif
+
+    @if ($u?->can('settings.view'))
+        <div class="nav-rail__section">System</div>
+        <a class="nav-rail__link" href="{{ url('/settings') }}" @if(request()->is('settings')) aria-current="page" @endif>Settings</a>
+        <a class="nav-rail__link" href="{{ url('/ui') }}" @if(request()->is('ui')) aria-current="page" @endif>Components</a>
+    @endif
 </nav>

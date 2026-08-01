@@ -95,6 +95,51 @@ a { color: var(--action); text-underline-offset: 2px; }
 
 .container-narrow { max-width: 960px; margin: 0 auto; }
 
+/* ---- Form controls (field, select, textarea) ---- */
+.field { display: block; margin-bottom: var(--space-4); }
+.field__label { display: block; font-size: var(--text-sm); font-weight: var(--weight-medium); margin-bottom: var(--space-2); }
+.field__hint { display: block; font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--space-1); }
+.field__error { display: block; font-size: var(--text-xs); color: var(--danger); margin-top: var(--space-1); }
+.input, .select, .textarea {
+  width: 100%; min-height: var(--tap-min); padding: 0 var(--space-3);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: var(--text-base); background: var(--surface); color: var(--text);
+}
+.textarea { padding: var(--space-2) var(--space-3); min-height: 88px; line-height: var(--leading-normal); }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--action); }
+.input[aria-invalid="true"], .select[aria-invalid="true"] { border-color: var(--danger); }
+
+/* ---- Data table ---- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+.table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.table th, .table td { text-align: left; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); }
+.table th { font-weight: var(--weight-semibold); color: var(--text-muted); background: var(--surface-sunken); position: sticky; top: 0; }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody tr:hover { background: var(--surface-sunken); }
+.table .num, .table td.num, .table th.num { text-align: right; font-variant-numeric: tabular-nums lining-nums; }
+
+/* ---- KPI card ---- */
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5); box-shadow: var(--elev-1); }
+.kpi__label { font-size: var(--text-sm); color: var(--text-muted); }
+.kpi__value { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); font-variant-numeric: tabular-nums lining-nums; margin-top: var(--space-1); }
+.kpi__hint { font-size: var(--text-xs); color: var(--text-subtle); margin-top: var(--space-1); }
+
+/* ---- States: empty / error / loading skeleton ---- */
+.state { text-align: center; padding: var(--space-7) var(--space-5); color: var(--text-muted); }
+.state__title { font-family: var(--font-heading); font-weight: 600; color: var(--text); margin-bottom: var(--space-2); }
+.state__actions { margin-top: var(--space-4); display: flex; gap: var(--space-2); justify-content: center; flex-wrap: wrap; }
+.state--error { color: var(--danger); }
+.skeleton { background: linear-gradient(90deg, var(--neutral-100) 25%, var(--neutral-200) 37%, var(--neutral-100) 63%); background-size: 400% 100%; border-radius: var(--radius-sm); animation: skeleton 1.4s ease infinite; }
+.skeleton-row { height: 14px; margin-bottom: var(--space-3); }
+@keyframes skeleton { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+/* ---- Page header ---- */
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap; }
+.page-header__title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); }
+.stack { display: grid; gap: var(--space-4); }
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); }
+
 /* Mobile: rail collapses (portal is mobile-first; back office is desktop-first) */
 @media (max-width: 800px) {
   .app-shell { grid-template-columns: 1fr; }

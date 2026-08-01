@@ -32,6 +32,26 @@ if (! function_exists('feature')) {
     }
 }
 
+if (! function_exists('current_institute')) {
+    /**
+     * The single institute for this instance (one institute per client).
+     */
+    function current_institute(): ?\App\Models\Institute
+    {
+        return \App\Models\Institute::query()->orderBy('id')->first();
+    }
+}
+
+if (! function_exists('active_session')) {
+    /**
+     * The active academic session for this instance.
+     */
+    function active_session(): ?\App\Models\AcademicSession
+    {
+        return \App\Models\AcademicSession::query()->where('is_active', true)->orderByDesc('id')->first();
+    }
+}
+
 if (! function_exists('paise_to_rupees')) {
     /**
      * Format integer paise as a full Indian-grouped rupee string (no paise shown
