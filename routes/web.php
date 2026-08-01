@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\ReceiptController;
 use App\Livewire\Admissions\AdmissionsManager;
 use App\Livewire\Batches\BatchManager;
 use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Enquiries\EnquiryManager;
+use App\Livewire\Fees\BillingManager;
+use App\Livewire\Fees\FeeSetupManager;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
@@ -14,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn () => view('home'))->name('home');
 
 // Lightweight health endpoint for monitoring (Phase 17 extends this).
-Route::get('/up', fn () => response()->json(['status' => 'ok', 'phase' => 3]))->name('health');
+Route::get('/up', fn () => response()->json(['status' => 'ok', 'phase' => 7]))->name('health');
 
 // Authenticated back office (modules light up phase by phase).
 Route::middleware('auth')->group(function () {
@@ -24,6 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/admissions', AdmissionsManager::class)->name('admissions');
     Route::get('/batches', BatchManager::class)->name('batches');
     Route::get('/timetable', TimetableManager::class)->name('timetable');
+
+    Route::get('/fees', BillingManager::class)->name('fees');
+    Route::get('/fees/setup', FeeSetupManager::class)->name('fees.setup');
+    Route::get('/receipts/{payment}', [ReceiptController::class, 'show'])->name('receipts.show');
 
     Route::get('/settings', SettingsManager::class)->name('settings');
     Route::get('/branches', BranchManager::class)->name('branches');
