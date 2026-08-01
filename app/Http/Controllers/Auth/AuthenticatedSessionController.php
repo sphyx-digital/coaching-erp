@@ -30,7 +30,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        $home = Auth::user()->isPortalUser() ? route('portal') : route('dashboard');
+
+        return redirect()->intended($home);
     }
 
     public function destroy(Request $request): RedirectResponse

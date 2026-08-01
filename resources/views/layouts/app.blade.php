@@ -23,7 +23,6 @@
             <div class="topbar__title">@yield('title', 'Dashboard')</div>
             <div class="topbar__right">
                 @yield('topbar')
-                <span class="pill pill--info"><span class="pill__dot"></span> Phase 0</span>
             </div>
         </header>
 

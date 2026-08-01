@@ -1,9 +1,10 @@
 /*
- * Coaching Institute ERP - service worker (Phase 0 skeleton).
- * Provides a minimal offline shell. Phase 10 extends this with the portal's
- * last-loaded summary cache and a clear stale-data notice.
+ * Coaching Institute ERP - service worker.
+ * Network-first for navigations, caching the last-loaded page so the portal
+ * shows the last saved data offline (with a stale-data notice in the UI),
+ * falling back to a generic offline page when nothing is cached.
  */
-const CACHE = 'coaching-erp-shell-v1';
+const CACHE = 'coaching-erp-shell-v2';
 const SHELL = ['/offline.html', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
@@ -24,11 +25,16 @@ self.addEventListener('fetch', (event) => {
     const { request } = event;
     if (request.method !== 'GET') return;
 
-    // Network-first for navigations, falling back to the offline shell.
     if (request.mode === 'navigate') {
         event.respondWith(
-            fetch(request).catch(() => caches.match('/offline.html'))
+            fetch(request)
+                .then((response) => {
+                    // Cache the last-loaded page for offline viewing.
+                    const copy = response.clone();
+                    caches.open(CACHE).then((cache) => cache.put(request, copy));
+                    return response;
+                })
+                .catch(() => caches.match(request).then((cached) => cached || caches.match('/offline.html')))
         );
-        return;
     }
 });

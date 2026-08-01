@@ -8,13 +8,17 @@ use App\Models\ReportCard;
 use App\Models\Student;
 use App\Services\Assessments\AssessmentService;
 use App\Services\Attendance\AttendanceService;
+use App\Support\Portal\PortalAccess;
 use Illuminate\Support\Facades\Auth;
 
 class ReportCardController extends Controller
 {
     public function show(Assessment $assessment, Student $student, AssessmentService $assessments, AttendanceService $attendance)
     {
-        abort_unless(Auth::user()?->can('report.view') || Auth::user()?->can('assessment.view'), 403);
+        $user = Auth::user();
+        $allowed = $user?->can('report.view') || $user?->can('assessment.view')
+            || ($user?->isPortalUser() && app(PortalAccess::class)->students($user)->contains('id', $student->id));
+        abort_unless($allowed, 403);
 
         $card = ReportCard::where('student_id', $student->id)->where('assessment_id', $assessment->id)
             ->where('status', 'published')->orderByDesc('version')->first();

@@ -11,20 +11,45 @@ use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
+use App\Livewire\Portal\PortalAttendance;
+use App\Livewire\Portal\PortalFees;
+use App\Livewire\Portal\PortalHome;
+use App\Livewire\Portal\PortalResults;
+use App\Livewire\Portal\PortalTimetable;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
 use App\Livewire\Timetable\TimetableManager;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('home'))->name('home');
+// Public landing: a sign-in gateway. Authenticated users go to their home.
+Route::get('/', function () {
+    if (! auth()->check()) {
+        return view('home');
+    }
+
+    return redirect()->route(auth()->user()->isPortalUser() ? 'portal' : 'dashboard');
+})->name('home');
 
 // Lightweight health endpoint for monitoring (Phase 17 extends this).
 Route::get('/up', fn () => response()->json(['status' => 'ok', 'phase' => 7]))->name('health');
 
+// Student and parent portal (read-only, ownership-scoped, mobile-first PWA).
+Route::middleware('auth')->prefix('portal')->group(function () {
+    Route::get('/', PortalHome::class)->name('portal');
+    Route::get('/fees', PortalFees::class)->name('portal.fees');
+    Route::get('/attendance', PortalAttendance::class)->name('portal.attendance');
+    Route::get('/results', PortalResults::class)->name('portal.results');
+    Route::get('/timetable', PortalTimetable::class)->name('portal.timetable');
+});
+
 // Authenticated back office (modules light up phase by phase).
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', function () {
+        return auth()->user()->isPortalUser()
+            ? redirect()->route('portal')
+            : view('dashboard');
+    })->name('dashboard');
 
     Route::get('/enquiries', EnquiryManager::class)->name('enquiries');
     Route::get('/admissions', AdmissionsManager::class)->name('admissions');
