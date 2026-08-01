@@ -3,6 +3,7 @@
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReportCardController;
 use App\Livewire\Admissions\AdmissionsManager;
+use App\Livewire\Approvals\ApprovalInbox;
 use App\Livewire\Assessments\AssessmentManager;
 use App\Livewire\Attendance\AttendanceRegister;
 use App\Livewire\Batches\BatchManager;
@@ -47,6 +48,7 @@ Route::middleware('auth')->prefix('portal')->group(function () {
 // Authenticated back office (modules light up phase by phase).
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/approvals', ApprovalInbox::class)->name('approvals');
 
     Route::get('/enquiries', EnquiryManager::class)->name('enquiries');
     Route::get('/admissions', AdmissionsManager::class)->name('admissions');

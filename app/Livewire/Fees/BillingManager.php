@@ -90,9 +90,12 @@ class BillingManager extends Component
     {
         abort_unless(Auth::user()?->can('fee.update'), 403);
         $invoice = Invoice::findOrFail($this->discInvoiceId);
-        $discounts->applyToInvoice($invoice, 'fixed', (int) round((float) $this->discAmount * 100), 'Manual discount', Auth::user()->staff?->id);
+
+        // Routes through the approval engine when above the threshold.
+        $approval = $discounts->propose($invoice, 'fixed', (int) round((float) $this->discAmount * 100), 'Manual discount', Auth::user()->staff?->id);
+
         $this->reset(['discInvoiceId', 'discAmount']);
-        session()->flash('ok', 'Discount applied.');
+        session()->flash('ok', $approval ? 'Discount sent for approval.' : 'Discount applied.');
     }
 
     public function refund(RefundService $refunds): void

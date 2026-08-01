@@ -2,19 +2,50 @@
 
 namespace App\Services\Fees;
 
+use App\Models\Approval;
 use App\Models\Discount;
 use App\Models\Invoice;
+use App\Services\Approvals\ApprovalService;
 use App\Services\Audit\AuditLogger;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Applies a discount to an issued invoice as a concession that reduces the
- * receivable balance, with a reason and an approver reference (the approval
- * workflow itself lands in Phase 11). The ledger stays balanced.
+ * receivable balance, with a reason and an approver reference. A discount above
+ * the configured threshold routes through the Phase 11 approval engine before
+ * it is applied. The ledger stays balanced.
  */
 class DiscountService
 {
-    public function __construct(private LedgerService $ledger, private AuditLogger $audit) {}
+    public function __construct(
+        private LedgerService $ledger,
+        private AuditLogger $audit,
+        private ApprovalService $approvals,
+    ) {}
+
+    /**
+     * Propose a discount. Below the approval threshold it applies immediately
+     * (returns null); at or above it, an approval request is raised and the
+     * discount is applied only once approved.
+     */
+    public function propose(Invoice $invoice, string $kind, int $value, ?string $reason = null, ?int $approverStaffId = null): ?Approval
+    {
+        $amount = $kind === 'percent' ? (int) round($invoice->subtotal * $value / 10000) : $value;
+        $threshold = (int) client_setting('discount_approval_threshold', 500000); // ₹5,000
+
+        if ($amount < $threshold) {
+            $this->applyToInvoice($invoice, $kind, $value, $reason, $approverStaffId);
+
+            return null;
+        }
+
+        return $this->approvals->request(
+            $invoice, 'fee.discount',
+            'Discount '.paise_to_rupees($amount).' on '.$invoice->invoice_number,
+            'Institute Admin', $amount,
+            ['invoice_id' => $invoice->id, 'kind' => $kind, 'value' => $value, 'reason' => $reason, 'branch_id' => $invoice->branch_id],
+        );
+    }
 
     public function applyToInvoice(Invoice $invoice, string $kind, int $value, ?string $reason = null, ?int $approverId = null): Discount
     {

@@ -14,6 +14,10 @@
 
     <a class="nav-rail__link" href="{{ url('/dashboard') }}" {!! $link('dashboard') !!} title="Dashboard"><x-icon name="dashboard" /><span class="nav-rail__label">Dashboard</span></a>
 
+    @if ($u && ! $u->isPortalUser())
+        <a class="nav-rail__link" href="{{ url('/approvals') }}" {!! $link('approvals') !!} title="Approvals"><x-icon name="attendance" /><span class="nav-rail__label">Approvals</span></a>
+    @endif
+
     @if ($u?->can('enquiry.view') || $u?->can('admission.view'))
         <div class="nav-rail__section">Admissions</div>
         @if ($u?->can('enquiry.view'))<a class="nav-rail__link" href="{{ url('/enquiries') }}" {!! $link('enquiries') !!} title="Enquiries"><x-icon name="enquiry" /><span class="nav-rail__label">Enquiries</span></a>@endif
