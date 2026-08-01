@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\ReportCardController;
 use App\Livewire\Admissions\AdmissionsManager;
+use App\Livewire\Assessments\AssessmentManager;
 use App\Livewire\Attendance\AttendanceRegister;
 use App\Livewire\Batches\BatchManager;
 use App\Livewire\Branches\BranchManager;
@@ -29,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/batches', BatchManager::class)->name('batches');
     Route::get('/timetable', TimetableManager::class)->name('timetable');
     Route::get('/attendance', AttendanceRegister::class)->name('attendance');
+    Route::get('/assessments', AssessmentManager::class)->name('assessments');
+    Route::get('/report-cards/{assessment}/{student}', [ReportCardController::class, 'show'])->name('report-cards.show');
 
     Route::get('/fees', BillingManager::class)->name('fees');
     Route::get('/fees/setup', FeeSetupManager::class)->name('fees.setup');

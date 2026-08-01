@@ -41,8 +41,10 @@
         <a class="nav-rail__link" href="{{ url('/fees/setup') }}" @if(request()->is('fees/setup')) aria-current="page" @endif>Fee setup</a>
     @endif
 
-    <div class="nav-rail__section">Coming online by phase</div>
-    <a class="nav-rail__link" href="#" aria-disabled="true">Assessments</a>
+    @if ($u?->can('assessment.view'))
+        <div class="nav-rail__section">Assessments</div>
+        <a class="nav-rail__link" href="{{ url('/assessments') }}" @if(request()->is('assessments')) aria-current="page" @endif>Marks & results</a>
+    @endif
 
     @if ($u?->hasAllBranchAccess())
         <div class="nav-rail__section">Organisation</div>
