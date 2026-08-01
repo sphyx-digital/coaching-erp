@@ -3,6 +3,7 @@
 namespace App\Livewire\Enquiries;
 
 use App\Enums\EnquiryStatus;
+use App\Livewire\Concerns\WithTableTools;
 use App\Models\Branch;
 use App\Models\Course;
 use App\Models\Enquiry;
@@ -14,6 +15,10 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class EnquiryManager extends Component
 {
+    use WithTableTools;
+
+    public string $statusFilter = '';
+
     // Create form
     public string $name = '';
 
@@ -124,6 +129,23 @@ class EnquiryManager extends Component
         $this->closePanel();
     }
 
+    private function filteredEnquiries()
+    {
+        $q = Enquiry::with(['course', 'branch']);
+
+        if ($this->search !== '') {
+            $s = '%'.$this->search.'%';
+            $q->where(fn ($w) => $w->where('name', 'like', $s)->orWhere('phone', 'like', $s)->orWhere('enquiry_number', 'like', $s));
+        }
+        if ($this->statusFilter !== '') {
+            $q->where('status', $this->statusFilter);
+        }
+
+        $q = $this->sortField ? $this->applySort($q, 'id') : $q->latest();
+
+        return $q->limit(100)->get();
+    }
+
     public function render()
     {
         $today = now()->toDateString();
@@ -132,7 +154,7 @@ class EnquiryManager extends Component
         return view('livewire.enquiries.enquiry-manager', [
             'branches' => Branch::where('is_active', true)->orderBy('name')->pluck('name', 'id'),
             'courses' => Course::where('is_active', true)->orderBy('name')->pluck('name', 'id'),
-            'enquiries' => Enquiry::with(['course', 'branch'])->latest()->limit(100)->get(),
+            'enquiries' => $this->filteredEnquiries(),
             'dueToday' => Enquiry::dueBy($today)->with('course')->orderBy('next_follow_up_on')->get(),
             'kpiOpen' => Enquiry::open()->count(),
             'kpiDue' => Enquiry::dueBy($today)->count(),

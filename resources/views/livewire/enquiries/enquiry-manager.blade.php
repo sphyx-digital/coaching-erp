@@ -73,11 +73,27 @@
 
         {{-- Pipeline --}}
         <x-card title="Pipeline">
-            @if ($enquiries->isEmpty())
-                <x-state title="No enquiries yet">Capture your first lead above.</x-state>
-            @else
-                <x-data-table :head="['Enquiry', 'Name', 'Course', 'Status', 'Actions']">
-                    @foreach ($enquiries as $e)
+            <div class="toolbar">
+                <input class="input" type="search" placeholder="Search name, phone, number…" wire:model.live.debounce.300ms="search">
+                <button type="button" class="chip" wire:click="$set('statusFilter', '')" aria-pressed="{{ $statusFilter === '' ? 'true' : 'false' }}">All</button>
+                @foreach (\App\Enums\EnquiryStatus::cases() as $s)
+                    <button type="button" class="chip" wire:click="$set('statusFilter', '{{ $s->value }}')" aria-pressed="{{ $statusFilter === $s->value ? 'true' : 'false' }}">{{ $s->label() }}</button>
+                @endforeach
+            </div>
+
+            <div class="table-wrap">
+                <table class="table table--dense">
+                    <thead>
+                        <tr>
+                            <x-th field="enquiry_number" :sort="$sortField" :dir="$sortDir">Enquiry</x-th>
+                            <x-th field="name" :sort="$sortField" :dir="$sortDir">Name</x-th>
+                            <th>Course</th>
+                            <x-th field="status" :sort="$sortField" :dir="$sortDir">Status</x-th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @forelse ($enquiries as $e)
                         <tr wire:key="enq-{{ $e->id }}">
                             <td>{{ $e->enquiry_number }}</td>
                             <td>{{ $e->name }}<br><span class="field__hint">{{ $e->phone }}</span></td>
@@ -102,9 +118,12 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
-                </x-data-table>
-            @endif
+                    @empty
+                        <tr><td colspan="5"><x-state title="No enquiries found">Try a different search or filter.</x-state></td></tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
         </x-card>
     </div>
 </div>
