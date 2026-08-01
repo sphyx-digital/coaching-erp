@@ -1,0 +1,10 @@
+import './bootstrap';
+
+// PWA: register the service worker for the offline shell (Phase 10 extends it).
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {
+            // Registration failures are non-fatal; the app works online regardless.
+        });
+    });
+}

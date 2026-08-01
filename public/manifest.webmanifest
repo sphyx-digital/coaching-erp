@@ -1,0 +1,24 @@
+{
+    "name": "Coaching Institute ERP",
+    "short_name": "Coaching ERP",
+    "description": "Enquiry to enrollment, fees, attendance, assessment and the parent portal.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#f7f8fa",
+    "theme_color": "#4338ca",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

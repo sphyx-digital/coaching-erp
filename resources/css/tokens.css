@@ -1,0 +1,123 @@
+/*
+ * Coaching Institute ERP - Design Tokens
+ * Single source of truth for colour, type, spacing, radius, elevation, motion.
+ * Every component reads these custom properties. Components never hardcode a hex value.
+ *
+ * Brand model: two brand tokens, not one.
+ *   --brand-hue      decorative brand hue (logos, accents, tints) - may fail contrast at button size
+ *   --action         darker accessible action colour used behind white text (passes WCAG AA)
+ * Per-client branding overrides --brand-hue and --action (see config/client.php and the app shell).
+ */
+
+:root {
+  /* Neutral ramp (cool grey) */
+  --neutral-0:  #ffffff;
+  --neutral-50: #f7f8fa;
+  --neutral-100:#eef0f4;
+  --neutral-200:#e2e5ec;
+  --neutral-300:#cbd0da;
+  --neutral-400:#9aa1b1;
+  --neutral-500:#6b7385;
+  --neutral-600:#4d5464;
+  --neutral-700:#363c49;
+  --neutral-800:#242832;
+  --neutral-900:#151821;
+
+  /* Brand ramp (default demo theme: indigo). Per-client overrides swap these. */
+  --brand-50:  #eef0ff;
+  --brand-100: #e0e3ff;
+  --brand-200: #c6cbff;
+  --brand-300: #a3aaff;
+  --brand-400: #7c83f7;
+  --brand-500: #6366f1; /* decorative brand hue - fails AA on white text, so not used behind text */
+  --brand-600: #4f52e0;
+  --brand-700: #4338ca; /* accessible action colour - passes AA (>= 4.5:1) with white text */
+  --brand-800: #3730a3;
+  --brand-900: #272166;
+
+  /* Semantic brand tokens (client branding sets these two) */
+  --brand-hue: var(--brand-500);
+  --action:    var(--brand-700);
+  --action-hover: var(--brand-800);
+  --on-action: var(--neutral-0);
+
+  /* Semantic surfaces and text */
+  --surface:        var(--neutral-0);
+  --surface-sunken: var(--neutral-50);
+  --surface-raised: var(--neutral-0);
+  --surface-inverse:var(--neutral-900);
+  --border:         var(--neutral-200);
+  --border-strong:  var(--neutral-300);
+
+  --text:        var(--neutral-800);
+  --text-muted:  var(--neutral-500);
+  --text-subtle: var(--neutral-400);
+  --text-on-inverse: var(--neutral-50);
+
+  /* Status colours (always paired with an icon or dot + word, never colour alone) */
+  --success: #1a7f4b;
+  --success-tint: #e6f4ec;
+  --warning: #9a6a00;
+  --warning-tint: #fbf1da;
+  --danger:  #b3261e;
+  --danger-tint: #fbe9e8;
+  --info:    #1f5fa8;
+  --info-tint: #e7f0fb;
+
+  /* Typography: Poppins headings, DM Sans body/interface, with system fallbacks */
+  --font-heading: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body:    "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  /* Tabular lining figures so money and counts align in columns */
+  --num-features: "tnum" 1, "lnum" 1;
+
+  --text-xs:   0.75rem;   /* 12 */
+  --text-sm:   0.875rem;  /* 14 */
+  --text-base: 1rem;      /* 16 */
+  --text-lg:   1.125rem;  /* 18 */
+  --text-xl:   1.375rem;  /* 22 */
+  --text-2xl:  1.75rem;   /* 28 */
+  --text-3xl:  2.25rem;   /* 36 */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Spacing scale (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --elev-1: 0 1px 2px rgba(21, 24, 33, 0.06), 0 1px 3px rgba(21, 24, 33, 0.05);
+  --elev-2: 0 2px 6px rgba(21, 24, 33, 0.08), 0 4px 12px rgba(21, 24, 33, 0.06);
+  --elev-3: 0 8px 24px rgba(21, 24, 33, 0.12);
+
+  /* Motion: 150-300ms, ease-out on enter, transform/opacity only */
+  --motion-fast: 150ms;
+  --motion-base: 220ms;
+  --motion-slow: 300ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout */
+  --rail-width: 248px;
+  --topbar-height: 60px;
+  --tap-min: 44px; /* minimum touch target */
+}
+
+/* Honour reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0ms; --motion-base: 0ms; --motion-slow: 0ms; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

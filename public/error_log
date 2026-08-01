@@ -1,0 +1,105 @@
+[01-Aug-2026 12:52:01 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:01 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:01 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:04 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:04 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:06 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:13 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:17 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:18 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:21 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:37 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:46 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:52:51 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:53:02 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
+[01-Aug-2026 12:53:04 UTC] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.2.34. in /home/sphyx/coaching-erp/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/sphyx/coaching-erp/vendor/composer/autoload_real.php(25): require()
+#1 /home/sphyx/coaching-erp/vendor/autoload.php(22): ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad::getLoader()
+#2 /home/sphyx/coaching-erp/public/index.php(13): require('/home/sphyx/coa...')
+#3 {main}
+  thrown in /home/sphyx/coaching-erp/vendor/composer/platform_check.php on line 22
