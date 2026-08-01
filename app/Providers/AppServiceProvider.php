@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Platform Admin is a super-admin: every gate and policy passes.
+        Gate::before(fn (User $user, string $ability) => $user->hasRole('Platform Admin') ? true : null);
+
         // Schema conventions shared by every migration (Phase 1).
 
         // Audit columns on every table: who created / last updated the row.
