@@ -24,8 +24,13 @@
         @endif
     @endif
 
+    @if ($u?->can('batch.view'))
+        <div class="nav-rail__section">Academics</div>
+        <a class="nav-rail__link" href="{{ url('/batches') }}" @if(request()->is('batches')) aria-current="page" @endif>Batches</a>
+        <a class="nav-rail__link" href="{{ url('/timetable') }}" @if(request()->is('timetable')) aria-current="page" @endif>Timetable</a>
+    @endif
+
     <div class="nav-rail__section">Coming online by phase</div>
-    <a class="nav-rail__link" href="#" aria-disabled="true">Batches</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Fees</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Attendance</a>
     <a class="nav-rail__link" href="#" aria-disabled="true">Assessments</a>
