@@ -24,10 +24,19 @@ class AttendanceService
      */
     public function openSession(Batch $batch, string $date, ?int $slotId = null): AttendanceSession
     {
-        return AttendanceSession::firstOrCreate(
-            ['batch_id' => $batch->id, 'session_date' => $date, 'timetable_slot_id' => $slotId],
-            ['status' => 'open'],
-        );
+        // Explicit whereNull — firstOrCreate with a null attribute generates
+        // "= NULL" which never matches, causing duplicate sessions.
+        $existing = AttendanceSession::where('batch_id', $batch->id)
+            ->whereDate('session_date', $date)
+            ->when($slotId === null, fn ($q) => $q->whereNull('timetable_slot_id'), fn ($q) => $q->where('timetable_slot_id', $slotId))
+            ->first();
+
+        return $existing ?? AttendanceSession::create([
+            'batch_id' => $batch->id,
+            'session_date' => $date,
+            'timetable_slot_id' => $slotId,
+            'status' => 'open',
+        ]);
     }
 
     /** Live-enrolled student ids in a batch (the roster). */

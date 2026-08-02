@@ -35,6 +35,18 @@ return [
     // Reject an inaccessible action colour at boot (WCAG AA vs white text).
     'enforce_contrast' => env('CLIENT_ENFORCE_CONTRAST', true),
 
+    // Demo mode: show click-to-fill sample logins on the sign-in page.
+    'demo_mode' => env('DEMO_MODE', false),
+    'demo_password' => env('DEMO_PASSWORD', 'coaching123'),
+    'demo_accounts' => [
+        ['label' => 'Institute Admin', 'email' => env('PLATFORM_ADMIN_EMAIL', 'admin@coaching.sphyx.in'), 'password' => env('PLATFORM_ADMIN_PASSWORD', '')],
+        ['label' => 'Counsellor', 'email' => 'counsellor@coaching.sphyx.in', 'password' => env('DEMO_PASSWORD', 'coaching123')],
+        ['label' => 'Teacher', 'email' => 'teacher@coaching.sphyx.in', 'password' => env('DEMO_PASSWORD', 'coaching123')],
+        ['label' => 'Accountant', 'email' => 'accountant@coaching.sphyx.in', 'password' => env('DEMO_PASSWORD', 'coaching123')],
+        ['label' => 'Parent', 'email' => 'parent@coaching.sphyx.in', 'password' => env('DEMO_PASSWORD', 'coaching123')],
+        ['label' => 'Student', 'email' => 'student@coaching.sphyx.in', 'password' => env('DEMO_PASSWORD', 'coaching123')],
+    ],
+
     // Locale
     'currency' => env('CLIENT_CURRENCY', 'INR'),
     'currency_sign' => '₹',

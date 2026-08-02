@@ -13,9 +13,11 @@ use App\Models\FeeComponent;
 use App\Models\FeePlan;
 use App\Models\GradeScale;
 use App\Models\Guardian;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\TaxRate;
+use App\Models\User;
 use App\Services\Admissions\AdmissionService;
 use App\Services\Assessments\AssessmentService;
 use App\Services\Attendance\AttendanceService;
@@ -23,6 +25,7 @@ use App\Services\Enquiries\EnquiryService;
 use App\Services\Fees\FeeService;
 use App\Services\Fees\PaymentService;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * A realistic demo institute so dashboards and tables are populated. Idempotent:
@@ -132,6 +135,33 @@ class DemoDataSeeder extends Seeder
                 $enq->transition($e, $status);
             }
             $enq->logActivity($e->fresh(), 'Follow up call', now()->toDateString());
+        }
+
+        // Role-based demo logins (click-to-fill on the sign-in page).
+        $pw = Hash::make(config('client.demo_password', 'coaching123'));
+        $makeStaff = function (string $email, string $name, string $role) use ($institute, $branch, $pw) {
+            $u = User::firstOrCreate(['email' => $email], ['name' => $name, 'password' => $pw]);
+            $u->syncRoles([$role]);
+            Staff::firstOrCreate(['user_id' => $u->id], ['institute_id' => $institute->id, 'branch_id' => $branch->id, 'name' => $name]);
+
+            return $u;
+        };
+        $makeStaff('counsellor@coaching.sphyx.in', 'Neha Counsellor', 'Counsellor');
+        $makeStaff('teacher@coaching.sphyx.in', 'Rahul Teacher', 'Teacher');
+        $makeStaff('accountant@coaching.sphyx.in', 'Priya Accountant', 'Accountant');
+
+        // Parent demo login linked to the first demo student.
+        $first = $students->first();
+        if ($first) {
+            $parentUser = User::firstOrCreate(['email' => 'parent@coaching.sphyx.in'], ['name' => 'Demo Parent', 'password' => $pw]);
+            $parentUser->syncRoles(['Parent']);
+            $g = Guardian::firstOrCreate(['institute_id' => $institute->id, 'user_id' => $parentUser->id], ['name' => 'Demo Parent', 'phone' => '9999900000']);
+            $g->students()->syncWithoutDetaching([$first->id => ['is_primary' => true, 'relationship' => 'guardian']]);
+
+            // Student demo login linked to the second demo student.
+            $studentUser = User::firstOrCreate(['email' => 'student@coaching.sphyx.in'], ['name' => 'Demo Student', 'password' => $pw]);
+            $studentUser->syncRoles(['Student']);
+            ($students->get(1) ?? $first)->update(['user_id' => $studentUser->id]);
         }
     }
 }
