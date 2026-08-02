@@ -33,7 +33,7 @@ use App\Livewire\Timetable\TimetableManager;
 use Illuminate\Support\Facades\Route;
 
 // Gateway webhook (signature-verified, no auth/CSRF).
-Route::post('/webhooks/payment', [PaymentWebhookController::class, 'handle'])->name('webhooks.payment');
+Route::post('/webhooks/payment', [PaymentWebhookController::class, 'handle'])->middleware('throttle:60,1')->name('webhooks.payment');
 
 // Public landing: a sign-in gateway. Authenticated users go to their home.
 Route::get('/', function () {
