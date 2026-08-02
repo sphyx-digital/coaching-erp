@@ -37,6 +37,7 @@ use App\Livewire\Portal\PortalMaterials;
 use App\Livewire\Portal\PortalResults;
 use App\Livewire\Portal\PortalTimetable;
 use App\Livewire\Reports\Reports;
+use App\Livewire\Security\TwoFactorSettings;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
@@ -117,6 +118,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/payroll', PayrollManager::class)->name('payroll');
     Route::get('/payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
     Route::get('/website', WebsiteManager::class)->name('website');
+
+    Route::get('/security', TwoFactorSettings::class)->name('security');
 
     Route::view('/ui', 'ui.gallery')->name('ui.gallery');
 });
