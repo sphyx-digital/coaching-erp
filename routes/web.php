@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImportTemplateController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\PortalPaymentController;
 use App\Http\Controllers\ReceiptController;
@@ -17,6 +18,7 @@ use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
+use App\Livewire\Import\ImportManager;
 use App\Livewire\Notifications\FailedMessages;
 use App\Livewire\Portal\PortalAttendance;
 use App\Livewire\Portal\PortalFees;
@@ -74,6 +76,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports', Reports::class)->name('reports');
     Route::get('/reports/export/{report}', [ReportExportController::class, 'export'])->name('reports.export');
     Route::get('/messages', FailedMessages::class)->name('messages');
+    Route::get('/import', ImportManager::class)->name('import');
+    Route::get('/import/template/students', [ImportTemplateController::class, 'students'])->name('import.template.students');
     Route::get('/receipts/{payment}', [ReceiptController::class, 'show'])->name('receipts.show');
 
     Route::get('/settings', SettingsManager::class)->name('settings');

@@ -26,6 +26,8 @@ class LedgerService
 
     public const ACCT_REFUND = 'fees_refund';
 
+    public const ACCT_OPENING = 'opening_balance_equity';
+
     /**
      * Post balanced legs. Each leg: ['account'=>, 'debit'=>int, 'credit'=>int, 'narration'=>?].
      *
