@@ -4,7 +4,7 @@
 /* Minimal reset (kept small; component library grows in Phase 3) */
 *, *::before, *::after { box-sizing: border-box; }
 /* Pin a compact rem base so the interface stays dense and never scales up. */
-html { -webkit-text-size-adjust: 100%; font-size: 15px; }
+html { -webkit-text-size-adjust: 100%; font-size: 14px; }
 body {
   margin: 0;
   font-family: var(--font-body);
