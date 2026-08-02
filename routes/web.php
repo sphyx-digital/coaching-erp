@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IdCardController;
 use App\Http\Controllers\ImportTemplateController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\PortalPaymentController;
@@ -18,6 +19,7 @@ use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
+use App\Livewire\IdCards\IdCardManager;
 use App\Livewire\Import\ImportManager;
 use App\Livewire\Notifications\FailedMessages;
 use App\Livewire\Portal\PortalAttendance;
@@ -69,6 +71,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance', AttendanceRegister::class)->name('attendance');
     Route::get('/assessments', AssessmentManager::class)->name('assessments');
     Route::get('/report-cards/{assessment}/{student}', [ReportCardController::class, 'show'])->name('report-cards.show');
+
+    Route::get('/id-cards', IdCardManager::class)->name('id-cards');
+    Route::get('/id-cards/sheet', [IdCardController::class, 'sheet'])->name('id-cards.sheet');
 
     Route::get('/fees', BillingManager::class)->name('fees');
     Route::get('/fees/setup', FeeSetupManager::class)->name('fees.setup');

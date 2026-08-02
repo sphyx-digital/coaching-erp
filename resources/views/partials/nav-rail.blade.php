@@ -25,6 +25,7 @@
         <div class="nav-rail__section">Admissions</div>
         @if ($u?->can('enquiry.view'))<a class="nav-rail__link" href="{{ url('/enquiries') }}" {!! $link('enquiries') !!} title="Enquiries"><x-icon name="enquiry" /><span class="nav-rail__label">Enquiries</span></a>@endif
         @if ($u?->can('admission.view'))<a class="nav-rail__link" href="{{ url('/admissions') }}" {!! $link('admissions') !!} title="Admissions"><x-icon name="admission" /><span class="nav-rail__label">Admissions</span></a>@endif
+        @if ($u?->can('admission.view'))<a class="nav-rail__link" href="{{ url('/id-cards') }}" {!! $link('id-cards') !!} title="ID cards"><x-icon name="staff" /><span class="nav-rail__label">ID cards</span></a>@endif
     @endif
 
     @if ($u?->can('batch.view'))
