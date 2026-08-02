@@ -23,10 +23,27 @@ class CourseSubjectManager extends Component
 
     public ?int $subjectCourseId = null;
 
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         // Course and subject management is gated to Institute Admin.
         abort_unless(Auth::user()?->hasAllBranchAccess(), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->viewingId = null;
+        }
     }
 
     public function addCourse(): void
@@ -75,6 +92,7 @@ class CourseSubjectManager extends Component
             'courses' => Course::withCount('subjects')->orderBy('name')->get(),
             'subjects' => Subject::with('course')->orderBy('name')->get(),
             'courseOptions' => Course::orderBy('name')->pluck('name', 'id'),
+            'record' => $this->viewingId ? Course::withCount('subjects')->with('subjects')->find($this->viewingId) : null,
         ]);
     }
 }

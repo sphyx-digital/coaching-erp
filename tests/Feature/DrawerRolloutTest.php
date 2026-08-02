@@ -3,6 +3,9 @@
 namespace Tests\Feature;
 
 use App\Livewire\Batches\BatchManager;
+use App\Livewire\Branches\BranchManager;
+use App\Livewire\Courses\CourseSubjectManager;
+use App\Livewire\Materials\MaterialManager;
 use App\Livewire\Staff\StaffManager;
 use App\Models\AcademicSession;
 use App\Models\Batch;
@@ -60,5 +63,24 @@ class DrawerRolloutTest extends TestCase
             ->assertSet('viewing', true)
             ->assertSet('viewingId', $batch->id)
             ->assertSee('JEE-A');
+    }
+
+    public function test_course_row_opens_detail_drawer(): void
+    {
+        $course = Course::create(['institute_id' => $this->institute->id, 'name' => 'NEET Foundation', 'code' => 'NEET']);
+
+        Livewire::actingAs($this->admin)->test(CourseSubjectManager::class)
+            ->assertSee('NEET Foundation')
+            ->call('view', $course->id)
+            ->assertSet('viewing', true)
+            ->assertSet('viewingId', $course->id);
+    }
+
+    public function test_branch_and_material_screens_render(): void
+    {
+        Branch::create(['institute_id' => $this->institute->id, 'name' => 'Vijay Nagar', 'code' => 'VN']);
+
+        Livewire::actingAs($this->admin)->test(BranchManager::class)->assertOk()->assertSee('Vijay Nagar');
+        Livewire::actingAs($this->admin)->test(MaterialManager::class)->assertOk();
     }
 }

@@ -23,16 +23,15 @@
         @else
             <x-data-table :head="['Title', 'Type', 'Course / Batch', 'Status', '']">
                 @foreach ($materials as $m)
-                    <tr wire:key="m-{{ $m->id }}">
+                    <tr wire:key="m-{{ $m->id }}" class="is-clickable" wire:click="openEdit({{ $m->id }})" tabindex="0" wire:keydown.enter="openEdit({{ $m->id }})">
                         <td><b>{{ $m->title }}</b>@if($m->description)<div class="field__hint">{{ \Illuminate\Support\Str::limit($m->description, 70) }}</div>@endif</td>
                         <td><x-pill variant="info">{{ $m->typeLabel() }}</x-pill></td>
                         <td>{{ $m->course?->name ?? 'All' }}@if($m->batch) · {{ $m->batch->name }}@endif</td>
                         <td>@if($m->is_published)<x-pill variant="success">Published</x-pill>@else<x-pill variant="muted">Draft</x-pill>@endif</td>
                         <td style="text-align:right;white-space:nowrap;">
-                            <a class="btn btn--sm" href="{{ $m->url }}" target="_blank" rel="noopener">Open</a>
-                            <button class="btn btn--sm" wire:click="openEdit({{ $m->id }})">Edit</button>
-                            <button class="btn btn--sm" wire:click="togglePublish({{ $m->id }})">{{ $m->is_published ? 'Unpublish' : 'Publish' }}</button>
-                            <button class="btn btn--sm" wire:click="delete({{ $m->id }})" wire:confirm="Delete this material?">Delete</button>
+                            <a class="btn btn--sm" href="{{ $m->url }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open</a>
+                            <button class="btn btn--sm" wire:click.stop="togglePublish({{ $m->id }})">{{ $m->is_published ? 'Unpublish' : 'Publish' }}</button>
+                            <button class="btn btn--sm" wire:click.stop="delete({{ $m->id }})" wire:confirm="Delete this material?">Delete</button>
                         </td>
                     </tr>
                 @endforeach
