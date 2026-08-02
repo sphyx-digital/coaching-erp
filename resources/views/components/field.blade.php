@@ -5,6 +5,8 @@
     'value' => '',
     'hint' => null,
     'required' => false,
+    'numeric' => false,   // digits-only (phone, pincode); strips other chars
+    'maxlength' => null,
 ])
 
 <div class="field">
@@ -15,9 +17,11 @@
     <input
         id="{{ $name }}"
         name="{{ $name }}"
-        type="{{ $type }}"
+        type="{{ $numeric ? 'tel' : $type }}"
         value="{{ old($name, $value) }}"
         @if($required) required @endif
+        @if($numeric) inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')" @endif
+        @if($maxlength) maxlength="{{ $maxlength }}" @endif
         @error($name) aria-invalid="true" @enderror
         {{ $attributes->merge(['class' => 'input']) }}
     >

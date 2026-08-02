@@ -22,10 +22,10 @@
             <form wire:submit="create">
                 <div class="grid-cards">
                     <x-field name="name" label="Student name" wire:model="name" required />
-                    <x-field name="phone" label="Phone" wire:model.blur="phone" />
+                    <x-field name="phone" label="Phone" wire:model.blur="phone" numeric maxlength="15" />
                     <x-field name="email" label="Email" type="email" wire:model="email" />
                     <x-field name="guardian_name" label="Guardian name" wire:model="guardian_name" />
-                    <x-field name="guardian_phone" label="Guardian phone" wire:model="guardian_phone" />
+                    <x-field name="guardian_phone" label="Guardian phone" wire:model="guardian_phone" numeric maxlength="15" />
                     <x-field name="source" label="Source" wire:model="source" hint="walk-in, referral, online…" />
                     <x-select name="branch_id" label="Branch" :options="$branches->toArray()" placeholder="Select branch" wire:model="branch_id" required />
                     <x-select name="course_id" label="Interested course" :options="$courses->toArray()" placeholder="Not sure yet" wire:model.live="course_id" />

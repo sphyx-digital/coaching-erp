@@ -68,9 +68,9 @@
         <div class="form-section">
             <div class="form-section__title">Contact</div>
             <div class="form-grid">
-                <x-field label="Phone" name="data.phone" wire:model="data.phone" />
-                <x-field label="Alternate phone" name="data.alt_phone" wire:model="data.alt_phone" />
-                <x-field label="WhatsApp" name="data.whatsapp" wire:model="data.whatsapp" />
+                <x-field label="Phone" name="data.phone" wire:model="data.phone" numeric maxlength="15" />
+                <x-field label="Alternate phone" name="data.alt_phone" wire:model="data.alt_phone" numeric maxlength="15" />
+                <x-field label="WhatsApp" name="data.whatsapp" wire:model="data.whatsapp" numeric maxlength="15" />
                 <x-field label="Email" type="email" name="data.email" wire:model="data.email" />
                 <x-field label="Support email" type="email" name="data.support_email" wire:model="data.support_email" />
             </div>
@@ -85,7 +85,7 @@
                 <x-field label="Locality" name="data.locality" wire:model="data.locality" />
                 <x-field label="City" name="data.city" wire:model="data.city" />
                 <x-combobox label="State" :options="$states" wire:model="data.state" placeholder="Select state" />
-                <x-field label="Pincode" name="data.pincode" wire:model="data.pincode" />
+                <x-field label="Pincode" name="data.pincode" wire:model="data.pincode" numeric maxlength="6" />
                 <x-field label="Country" name="data.country" wire:model="data.country" />
                 <x-field label="Latitude" name="data.latitude" wire:model="data.latitude" />
                 <x-field label="Longitude" name="data.longitude" wire:model="data.longitude" />
@@ -97,7 +97,7 @@
             <div class="form-section__title">Management & legal</div>
             <div class="form-grid">
                 <x-field label="Manager name" name="data.manager_name" wire:model="data.manager_name" />
-                <x-field label="Manager phone" name="data.manager_phone" wire:model="data.manager_phone" />
+                <x-field label="Manager phone" name="data.manager_phone" wire:model="data.manager_phone" numeric maxlength="15" />
                 <x-field label="Manager email" type="email" name="data.manager_email" wire:model="data.manager_email" />
                 <x-field label="GSTIN" name="data.gstin" wire:model="data.gstin" />
                 <x-field label="PAN" name="data.pan" wire:model="data.pan" />

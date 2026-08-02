@@ -11,6 +11,7 @@ use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Dashboard;
 use App\Livewire\Enquiries\EnquiryManager;
+use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
 use App\Livewire\Portal\PortalAttendance;
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/fees', BillingManager::class)->name('fees');
     Route::get('/fees/setup', FeeSetupManager::class)->name('fees.setup');
+    Route::get('/overrides', OverrideLog::class)->name('overrides');
     Route::get('/receipts/{payment}', [ReceiptController::class, 'show'])->name('receipts.show');
 
     Route::get('/settings', SettingsManager::class)->name('settings');

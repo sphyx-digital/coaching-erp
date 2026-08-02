@@ -42,6 +42,7 @@
         <div class="nav-rail__section">Finance</div>
         <a class="nav-rail__link" href="{{ url('/fees') }}" {!! $link('fees') !!} title="Fees & payments"><x-icon name="fees" /><span class="nav-rail__label">Fees & payments</span></a>
         <a class="nav-rail__link" href="{{ url('/fees/setup') }}" {!! $link('fees/setup') !!} title="Fee setup"><x-icon name="course" /><span class="nav-rail__label">Fee setup</span></a>
+        <a class="nav-rail__link" href="{{ url('/overrides') }}" {!! $link('overrides') !!} title="Override log"><x-icon name="assessment" /><span class="nav-rail__label">Override log</span></a>
     @endif
 
     @if ($u?->hasAllBranchAccess())

@@ -92,10 +92,10 @@ class AdmissionsManager extends Component
             's_last' => ['nullable', 'string', 'max:255'],
             's_dob' => ['nullable', 'date', 'before:today'],
             's_gender' => ['nullable', 'string', 'max:20'],
-            's_phone' => ['nullable', 'string', 'max:20'],
+            's_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
             's_email' => ['nullable', 'email'],
             's_branch_id' => ['required', 'exists:branches,id'],
-            'g_phone' => ['nullable', 'string', 'max:20'],
+            'g_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
             'course_id' => ['required', 'exists:courses,id'],
         ]);
 

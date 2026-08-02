@@ -89,7 +89,13 @@ class BranchManager extends Component
             'data.manager_email' => ['nullable', 'email'],
             'data.gstin' => ['nullable', 'string', 'size:15'],
             'data.pan' => ['nullable', 'string', 'size:10'],
-            'data.pincode' => ['nullable', 'string', 'max:10'],
+            'data.pincode' => ['nullable', 'regex:/^[0-9]{6}$/'],
+            'data.phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+            'data.alt_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+            'data.whatsapp' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+            'data.manager_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+        ], [
+            'data.*.regex' => 'Enter digits only.',
         ]);
 
         $d = $this->data;

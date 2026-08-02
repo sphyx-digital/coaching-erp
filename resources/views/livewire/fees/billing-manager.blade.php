@@ -41,9 +41,12 @@
                                 <x-pill :variant="$v">{{ ucfirst($inv->status) }}</x-pill>
                             </td>
                             <td>
-                                @if ($inv->balance > 0)
+                                @if ($inv->balance > 0 && $inv->status !== 'cancelled')
                                     <x-btn size="sm" variant="primary" wire:click="$set('payInvoiceId', {{ $inv->id }})">Pay</x-btn>
                                     <x-btn size="sm" variant="secondary" wire:click="$set('discInvoiceId', {{ $inv->id }})">Discount</x-btn>
+                                @endif
+                                @if ($inv->amount_paid == 0 && $inv->status !== 'cancelled')
+                                    <x-btn size="sm" variant="secondary" wire:click="cancelInvoice({{ $inv->id }})">Cancel</x-btn>
                                 @endif
                             </td>
                         </tr>
@@ -89,7 +92,12 @@
                             <td class="num">{{ paise_to_rupees($p->amount) }}</td>
                             <td>
                                 <a href="{{ url('/receipts/'.$p->id) }}" target="_blank">Receipt</a>
-                                <x-btn size="sm" variant="secondary" wire:click="$set('refundPaymentId', {{ $p->id }})">Refund</x-btn>
+                                @if ($p->status === 'completed')
+                                    <x-btn size="sm" variant="secondary" wire:click="$set('refundPaymentId', {{ $p->id }})">Refund</x-btn>
+                                    <x-btn size="sm" variant="secondary" wire:click="reversePayment({{ $p->id }})">Reverse</x-btn>
+                                @else
+                                    <x-pill variant="danger">Reversed</x-pill>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

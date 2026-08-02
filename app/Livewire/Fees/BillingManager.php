@@ -6,6 +6,7 @@ use App\Models\FeePlan;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Student;
+use App\Services\Exceptions\ExceptionService;
 use App\Services\Fees\DiscountService;
 use App\Services\Fees\FeeService;
 use App\Services\Fees\PaymentService;
@@ -108,6 +109,28 @@ class BillingManager extends Component
             session()->flash('ok', 'Refund processed.');
         } catch (\DomainException $e) {
             $this->addError('refund', $e->getMessage());
+        }
+    }
+
+    public function reversePayment(int $id, ExceptionService $ex): void
+    {
+        abort_unless(Auth::user()?->can('fee.approve'), 403);
+        try {
+            $ex->reversePayment(Payment::findOrFail($id));
+            session()->flash('ok', 'Payment reversed.');
+        } catch (\DomainException $e) {
+            $this->addError('refund', $e->getMessage());
+        }
+    }
+
+    public function cancelInvoice(int $id, ExceptionService $ex): void
+    {
+        abort_unless(Auth::user()?->can('fee.approve'), 403);
+        try {
+            $ex->cancelInvoice(Invoice::findOrFail($id));
+            session()->flash('ok', 'Invoice cancelled.');
+        } catch (\DomainException $e) {
+            $this->addError('pay', $e->getMessage());
         }
     }
 
