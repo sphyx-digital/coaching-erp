@@ -4,6 +4,7 @@ use App\Http\Controllers\IdCardController;
 use App\Http\Controllers\ImportTemplateController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\PortalPaymentController;
+use App\Http\Controllers\PublicSiteController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReportCardController;
 use App\Http\Controllers\ReportExportController;
@@ -32,6 +33,7 @@ use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
 use App\Livewire\Timetable\TimetableManager;
+use App\Livewire\Website\WebsiteManager;
 use Illuminate\Support\Facades\Route;
 
 // Gateway webhook (signature-verified, no auth/CSRF).
@@ -48,6 +50,14 @@ Route::get('/', function () {
 
 // Lightweight health endpoint for monitoring (Phase 17 extends this).
 Route::get('/up', fn () => response()->json(['status' => 'ok', 'phase' => 7]))->name('health');
+
+// Public marketing website — data-driven from published branches/courses.
+Route::prefix('site')->group(function () {
+    Route::get('/', [PublicSiteController::class, 'home'])->name('site.home');
+    Route::get('/branches/{slug}', [PublicSiteController::class, 'branch'])->name('site.branch');
+    Route::get('/courses/{slug}', [PublicSiteController::class, 'course'])->name('site.course');
+    Route::post('/enquiry', [PublicSiteController::class, 'storeEnquiry'])->middleware('throttle:10,1')->name('site.enquiry');
+});
 
 // Student and parent portal (read-only, ownership-scoped, mobile-first PWA).
 Route::middleware('auth')->prefix('portal')->group(function () {
@@ -90,6 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses', CourseSubjectManager::class)->name('courses');
     Route::get('/sessions', SessionManager::class)->name('sessions');
     Route::get('/staff', StaffManager::class)->name('staff');
+    Route::get('/website', WebsiteManager::class)->name('website');
 
     Route::view('/ui', 'ui.gallery')->name('ui.gallery');
 });

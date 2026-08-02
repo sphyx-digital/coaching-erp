@@ -56,6 +56,7 @@
         <a class="nav-rail__link" href="{{ url('/sessions') }}" {!! $link('sessions') !!} title="Sessions"><x-icon name="session" /><span class="nav-rail__label">Sessions</span></a>
         <a class="nav-rail__link" href="{{ url('/staff') }}" {!! $link('staff') !!} title="Staff"><x-icon name="staff" /><span class="nav-rail__label">Staff</span></a>
         <a class="nav-rail__link" href="{{ url('/import') }}" {!! $link('import') !!} title="Import & cutover"><x-icon name="course" /><span class="nav-rail__label">Import</span></a>
+        <a class="nav-rail__link" href="{{ url('/website') }}" {!! $link('website') !!} title="Website"><x-icon name="components" /><span class="nav-rail__label">Website</span></a>
     @endif
 
     @if ($u?->can('settings.view'))

@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             InstituteSeeder::class,
             PlatformAdminSeeder::class,
             DemoDataSeeder::class,
+            WebsiteContentSeeder::class,
         ]);
     }
 }

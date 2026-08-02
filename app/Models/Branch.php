@@ -39,6 +39,12 @@ class Branch extends Model
         });
     }
 
+    /** Only branches marked visible on the public website. */
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true)->where('is_active', true);
+    }
+
     /** One-line address for lists and cards. */
     public function shortAddress(): string
     {
