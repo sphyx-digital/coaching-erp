@@ -245,6 +245,14 @@ a { color: var(--action); text-underline-offset: 2px; }
 .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-3); }
 .grid-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-3); }
 
+/* Let grid/flex children shrink instead of forcing horizontal overflow.
+   Inputs carry an intrinsic ~200px min-width; without this they overflow narrow
+   columns on mobile. */
+.field, .input, .select, .textarea, .combobox { min-width: 0; max-width: 100%; }
+.grid-cards > *, .form-grid > *, .name-row > *, .phone-row > *, .toolbar > * { min-width: 0; }
+.card, .app-content, .stack, .stack > * { min-width: 0; }
+img, video { max-width: 100%; height: auto; }
+
 /* ---- Student / parent portal (mobile first, PWA) ---- */
 .portal-body { margin: 0; background: var(--surface-sunken); padding-bottom: 76px; }
 .offline-banner { background: var(--warning-tint); color: var(--warning); text-align: center; padding: var(--space-2) var(--space-4); font-size: var(--text-sm); display: flex; align-items: center; justify-content: center; gap: var(--space-2); }
@@ -297,6 +305,9 @@ a { color: var(--action); text-underline-offset: 2px; }
 }
 
 @media (max-width: 520px) {
-  .grid-cards { grid-template-columns: 1fr; }
+  .grid-cards,
+  .form-grid, .form-grid--2, .form-grid--3,
+  .name-row, .phone-row { grid-template-columns: 1fr; }
   .page-header { flex-wrap: wrap; gap: var(--space-2); }
+  .drawer__foot { flex-direction: column; align-items: stretch; }
 }
