@@ -61,12 +61,14 @@ class AdmissionsManager extends Component
 
     public bool $consent_comm = true;
 
-    // Panels
+    // Detail drawer + panels
+    public bool $viewing = false;
+
+    public ?int $profileId = null;
+
     public ?int $withdrawId = null;
 
     public string $withdrawReason = '';
-
-    public ?int $profileId = null;
 
     public function mount(): void
     {
@@ -175,6 +177,15 @@ class AdmissionsManager extends Component
     public function viewProfile(int $studentId): void
     {
         $this->profileId = $studentId;
+        $this->viewing = true;
+        $this->reset(['withdrawId', 'withdrawReason']);
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->reset(['profileId', 'withdrawId', 'withdrawReason']);
+        }
     }
 
     private function consentTypes(): array
@@ -196,7 +207,7 @@ class AdmissionsManager extends Component
                 ->whereIn('status', [EnrollmentStatus::Active->value, EnrollmentStatus::OnHold->value, EnrollmentStatus::Withdrawn->value])
                 ->latest()->limit(100)->get(),
             'profile' => $this->profileId
-                ? Student::with(['guardians', 'enrollments.course'])->find($this->profileId)
+                ? Student::with(['guardians', 'enrollments.course', 'branch'])->find($this->profileId)
                 : null,
         ]);
     }

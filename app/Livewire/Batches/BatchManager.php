@@ -35,9 +35,28 @@ class BatchManager extends Component
 
     public ?int $moveTo = null;
 
+    // detail drawer
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('batch.view'), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+        $this->reset(['moveId', 'moveTo']);
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->reset(['viewingId', 'moveId', 'moveTo']);
+        }
     }
 
     public function create(): void
@@ -110,6 +129,7 @@ class BatchManager extends Component
 
         return view('livewire.batches.batch-manager', [
             'batches' => $batches,
+            'record' => $this->viewingId ? Batch::with(['course', 'teacher', 'classroom'])->find($this->viewingId) : null,
             'batchOptions' => $batches->pluck('name', 'id'),
             'unassigned' => Enrollment::with(['student', 'course'])
                 ->whereNull('batch_id')->whereIn('status', EnrollmentStatus::liveValues())->get(),

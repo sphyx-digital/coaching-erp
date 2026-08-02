@@ -23,43 +23,62 @@
         @if ($batches->isEmpty())
             <x-state title="No batches yet">Create a batch to assign students and build a timetable.</x-state>
         @else
-            <x-data-table :head="['Batch', 'Course', 'Teacher', ['label' => 'Filled', 'num' => true], 'Students', 'Actions']">
+            <x-data-table :head="['Batch', 'Course', 'Teacher', ['label' => 'Filled', 'num' => true], '']">
                 @foreach ($batches as $batch)
-                    <tr wire:key="batch-{{ $batch->id }}">
+                    <tr wire:key="batch-{{ $batch->id }}" class="is-clickable" wire:click="view({{ $batch->id }})" tabindex="0" wire:keydown.enter="view({{ $batch->id }})">
                         <td>{{ $batch->name }}</td>
                         <td>{{ $batch->course?->name }}</td>
                         <td>{{ $batch->teacher?->name ?: '—' }}</td>
                         <td class="num">{{ $batch->live_count }}{{ $batch->capacity ? ' / '.$batch->capacity : '' }}</td>
-                        <td>
-                            @foreach (($assignedByBatch[$batch->id] ?? []) as $en)
-                                <div style="display:flex; align-items:center; gap: var(--space-2);">
-                                    <span>{{ $en->student?->name }}</span>
-                                    <a href="#" wire:click.prevent="$set('moveId', {{ $en->id }})" style="font-size: var(--text-xs);">move</a>
-                                </div>
-                            @endforeach
-                            @if (empty($assignedByBatch[$batch->id]))<span class="field__hint">No students</span>@endif
-                        </td>
-                        <td>
-                            <a href="{{ url('/timetable?batch='.$batch->id) }}">Timetable</a>
-                            <x-btn size="sm" variant="secondary" wire:click="deleteBatch({{ $batch->id }})">Delete</x-btn>
-                        </td>
+                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
                     </tr>
                 @endforeach
             </x-data-table>
         @endif
     </x-card>
 
-    @if ($moveId)
-        <x-card title="Move student to another batch">
-            <div class="grid-cards">
-                <x-select name="moveTo" label="Target batch" :options="$batchOptions->toArray()" placeholder="Select batch" wire:model="moveTo" />
+    {{-- Batch detail drawer --}}
+    <x-drawer wire:model="viewing" :title="$record?->name" eyebrow="Batch" :subtitle="$record?->course?->name">
+        @if ($record)
+            <dl class="detail-list">
+                <dt>Code</dt><dd>{{ $record->code }}</dd>
+                <dt>Course</dt><dd>{{ $record->course?->name ?: '—' }}</dd>
+                <dt>Teacher</dt><dd>{{ $record->teacher?->name ?: 'Unassigned' }}</dd>
+                <dt>Room</dt><dd>{{ $record->classroom?->name ?: 'Unassigned' }}</dd>
+                <dt>Capacity</dt><dd>{{ $record->capacity ? $record->capacity : 'Unlimited' }}</dd>
+            </dl>
+
+            <div class="detail-section">
+                <div class="detail-section__title">Students ({{ count($assignedByBatch[$record->id] ?? []) }})</div>
+                @forelse (($assignedByBatch[$record->id] ?? []) as $en)
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">
+                        <span>{{ $en->student?->name }}</span>
+                        <x-btn size="sm" variant="secondary" wire:click="$set('moveId', {{ $en->id }})">Move</x-btn>
+                    </div>
+                @empty
+                    <span class="field__hint">No students assigned yet.</span>
+                @endforelse
             </div>
-            <div style="display:flex; gap: var(--space-2);">
-                <x-btn variant="primary" wire:click="doMove">Move</x-btn>
-                <x-btn variant="secondary" wire:click="$set('moveId', null)">Cancel</x-btn>
-            </div>
-        </x-card>
-    @endif
+
+            @if ($moveId)
+                <div class="detail-section">
+                    <div class="detail-section__title">Move student to another batch</div>
+                    <x-select name="moveTo" label="Target batch" :options="$batchOptions->toArray()" placeholder="Select batch" wire:model="moveTo" />
+                    <div style="display:flex; gap: var(--space-2); margin-top: var(--space-2);">
+                        <x-btn variant="primary" wire:click="doMove">Move</x-btn>
+                        <x-btn variant="secondary" wire:click="$set('moveId', null)">Cancel</x-btn>
+                    </div>
+                </div>
+            @endif
+        @endif
+
+        <x-slot:footer>
+            @if ($record)
+                <a class="btn btn--sm btn--secondary" href="{{ url('/timetable?batch='.$record->id) }}">Timetable</a>
+                <x-btn size="sm" variant="secondary" wire:click="deleteBatch({{ $record->id }})">Delete batch</x-btn>
+            @endif
+        </x-slot:footer>
+    </x-drawer>
 
     <x-card title="Unassigned students">
         @if ($unassigned->isEmpty())

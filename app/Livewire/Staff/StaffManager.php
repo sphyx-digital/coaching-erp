@@ -27,9 +27,26 @@ class StaffManager extends Component
 
     public ?int $branch_id = null;
 
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('settings.update'), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->viewingId = null;
+        }
     }
 
     public function save(AuditLogger $audit): void
@@ -95,6 +112,7 @@ class StaffManager extends Component
             'staff' => Staff::with('user')->orderBy('name')->get(),
             'branches' => Branch::orderBy('name')->pluck('name', 'id'),
             'roles' => self::STAFF_ROLES,
+            'record' => $this->viewingId ? Staff::with(['user', 'primaryBranch'])->find($this->viewingId) : null,
         ]);
     }
 }

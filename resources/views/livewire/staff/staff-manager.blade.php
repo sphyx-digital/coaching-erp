@@ -18,9 +18,9 @@
             @if ($staff->isEmpty())
                 <x-state title="No staff yet">Add your first staff member above.</x-state>
             @else
-                <x-data-table :head="['Name', 'Email', 'Role', 'Status', 'Actions']">
+                <x-data-table :head="['Name', 'Email', 'Role', 'Status', '']">
                     @foreach ($staff as $member)
-                        <tr wire:key="staff-{{ $member->id }}">
+                        <tr wire:key="staff-{{ $member->id }}" class="is-clickable" wire:click="view({{ $member->id }})" tabindex="0" wire:keydown.enter="view({{ $member->id }})">
                             <td>{{ $member->name }}</td>
                             <td>{{ $member->email }}</td>
                             <td>
@@ -35,15 +35,43 @@
                                     <x-pill variant="warning">Inactive</x-pill>
                                 @endif
                             </td>
-                            <td>
-                                <x-btn size="sm" variant="secondary" wire:click="toggleActive({{ $member->id }})">
-                                    {{ $member->is_active ? 'Deactivate' : 'Activate' }}
-                                </x-btn>
-                            </td>
+                            <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
                         </tr>
                     @endforeach
                 </x-data-table>
             @endif
         </x-card>
     </div>
+
+    {{-- Staff detail drawer --}}
+    <x-drawer wire:model="viewing" :title="$record?->name" eyebrow="Staff member"
+              :subtitle="$record?->designation ?: ($record?->user?->getRoleNames()->first() ?? null)">
+        @if ($record)
+            <dl class="detail-list">
+                <dt>Email</dt><dd>{{ $record->email ?: '—' }}</dd>
+                <dt>Phone</dt><dd>{{ $record->phone ?: '—' }}</dd>
+                <dt>Employee code</dt><dd>{{ $record->employee_code ?: '—' }}</dd>
+                <dt>Branch</dt><dd>{{ $record->primaryBranch?->name ?? '—' }}</dd>
+                <dt>Status</dt><dd>@if($record->is_active)<x-pill variant="success">Active</x-pill>@else<x-pill variant="warning">Inactive</x-pill>@endif</dd>
+            </dl>
+
+            <div class="detail-section">
+                <div class="detail-section__title">Role</div>
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                    @php($current = $record->user?->getRoleNames()->first())
+                    @foreach ($roles as $r)
+                        <x-btn size="sm" :variant="$current === $r ? 'primary' : 'secondary'" wire:click="changeRole({{ $record->id }}, '{{ $r }}')">{{ $r }}</x-btn>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <x-slot:footer>
+            @if ($record)
+                <x-btn size="sm" variant="secondary" wire:click="toggleActive({{ $record->id }})">{{ $record->is_active ? 'Deactivate' : 'Activate' }}</x-btn>
+                <a class="btn btn--sm btn--secondary" href="{{ url('/staff-attendance') }}">Attendance</a>
+                <a class="btn btn--sm btn--secondary" href="{{ url('/payroll') }}">Payroll</a>
+            @endif
+        </x-slot:footer>
+    </x-drawer>
 </div>

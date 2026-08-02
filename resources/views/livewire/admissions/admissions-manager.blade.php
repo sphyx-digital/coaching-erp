@@ -42,29 +42,14 @@
         </form>
     </x-card>
 
-    @if ($withdrawId)
-        <x-card title="Withdraw enrollment">
-            <form wire:submit="withdraw">
-                <x-field name="withdrawReason" label="Reason" wire:model="withdrawReason" />
-                <div style="display:flex; gap: var(--space-2);">
-                    <x-btn type="submit" variant="primary">Withdraw</x-btn>
-                    <x-btn type="button" variant="secondary" wire:click="$set('withdrawId', null)">Cancel</x-btn>
-                </div>
-            </form>
-        </x-card>
-    @endif
-
     @if ($provisional->isNotEmpty())
         <x-card title="Provisional (from enquiry conversions)">
-            <x-data-table :head="['Name', 'Course', 'Actions']">
+            <x-data-table :head="['Name', 'Course', '']">
                 @foreach ($provisional as $e)
-                    <tr wire:key="prov-{{ $e->id }}">
+                    <tr wire:key="prov-{{ $e->id }}" class="is-clickable" wire:click="viewProfile({{ $e->student_id }})" tabindex="0" wire:keydown.enter="viewProfile({{ $e->student_id }})">
                         <td>{{ $e->student?->name }}</td>
                         <td>{{ $e->course?->name }}</td>
-                        <td>
-                            <x-btn size="sm" variant="primary" wire:click="activate({{ $e->id }})">Complete admission</x-btn>
-                            <x-btn size="sm" variant="secondary" wire:click="openWithdraw({{ $e->id }})">Withdraw</x-btn>
-                        </td>
+                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
                     </tr>
                 @endforeach
             </x-data-table>
@@ -75,43 +60,74 @@
         @if ($enrollments->isEmpty())
             <x-state title="No admissions yet">Admit a student above or complete a provisional conversion.</x-state>
         @else
-            <x-data-table :head="['Admission #', 'Name', 'Course', 'Status', 'Actions']">
+            <x-data-table :head="['Admission #', 'Name', 'Course', 'Status', '']">
                 @foreach ($enrollments as $e)
-                    <tr wire:key="enr-{{ $e->id }}">
+                    <tr wire:key="enr-{{ $e->id }}" class="is-clickable" wire:click="viewProfile({{ $e->student_id }})" tabindex="0" wire:keydown.enter="viewProfile({{ $e->student_id }})">
                         <td>{{ $e->student?->admission_number ?: '—' }}</td>
                         <td>{{ $e->student?->name }}</td>
                         <td>{{ $e->course?->name }}</td>
                         <td><x-pill :variant="$e->status->pillVariant()">{{ $e->status->label() }}</x-pill></td>
-                        <td>
-                            <x-btn size="sm" variant="secondary" wire:click="viewProfile({{ $e->student_id }})">View</x-btn>
-                            @if ($e->status !== \App\Enums\EnrollmentStatus::Withdrawn)
-                                <x-btn size="sm" variant="secondary" wire:click="openWithdraw({{ $e->id }})">Withdraw</x-btn>
-                            @endif
-                        </td>
+                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
                     </tr>
                 @endforeach
             </x-data-table>
         @endif
     </x-card>
 
-    @if ($profile)
-        <x-card title="Profile: {{ $profile->name }}">
-            <div class="grid-cards">
-                <div><span class="field__hint">Admission #</span><div>{{ $profile->admission_number ?: '—' }}</div></div>
-                <div><span class="field__hint">Date of birth</span><div>{{ $profile->dob?->format('d-m-Y') ?: '—' }} @if($profile->isMinor())<x-pill variant="info">Minor</x-pill>@endif</div></div>
-                <div><span class="field__hint">Phone</span><div>{{ $profile->phone ?: '—' }}</div></div>
+    {{-- Student detail drawer --}}
+    <x-drawer wire:model="viewing" :title="$profile?->name" eyebrow="Student"
+              :subtitle="$profile?->admission_number ? 'Admission '.$profile->admission_number : 'No admission number yet'">
+        @if ($profile)
+            <dl class="detail-list">
+                <dt>Admission #</dt><dd>{{ $profile->admission_number ?: '—' }}</dd>
+                <dt>Date of birth</dt><dd>{{ $profile->dob?->format('d-m-Y') ?: '—' }} @if($profile->isMinor())<x-pill variant="info">Minor</x-pill>@endif</dd>
+                <dt>Gender</dt><dd>{{ $profile->gender ?: '—' }}</dd>
+                <dt>Phone</dt><dd>{{ $profile->phone ?: '—' }}</dd>
+                <dt>Email</dt><dd>{{ $profile->email ?: '—' }}</dd>
+                <dt>Branch</dt><dd>{{ $profile->branch?->name ?? '—' }}</dd>
+            </dl>
+
+            <div class="detail-section">
+                <div class="detail-section__title">Guardians</div>
+                @forelse ($profile->guardians as $g)
+                    <div style="margin-bottom:4px;">{{ $g->name }} <span class="field__hint">({{ $g->pivot->relationship }})</span> @if($g->pivot->is_primary)<x-pill variant="success">Primary</x-pill>@endif</div>
+                @empty
+                    <span class="field__hint">None linked</span>
+                @endforelse
             </div>
-            <h3 style="font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-4) 0 var(--space-2);">Guardians</h3>
-            @forelse ($profile->guardians as $g)
-                <div>{{ $g->name }} ({{ $g->pivot->relationship }}) @if($g->pivot->is_primary)<x-pill variant="success">Primary</x-pill>@endif</div>
-            @empty
-                <span class="field__hint">None linked</span>
-            @endforelse
-            <h3 style="font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-4) 0 var(--space-2);">Enrollments</h3>
-            @foreach ($profile->enrollments as $en)
-                <div>{{ $en->course?->name }} — <x-pill :variant="$en->status->pillVariant()">{{ $en->status->label() }}</x-pill></div>
-            @endforeach
-            <div style="margin-top: var(--space-4);"><x-btn size="sm" variant="secondary" wire:click="$set('profileId', null)">Close</x-btn></div>
-        </x-card>
-    @endif
+
+            <div class="detail-section">
+                <div class="detail-section__title">Enrollments</div>
+                @foreach ($profile->enrollments as $en)
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-2); padding:6px 0; border-bottom:1px solid var(--border);">
+                        <div>{{ $en->course?->name }} <x-pill :variant="$en->status->pillVariant()">{{ $en->status->label() }}</x-pill></div>
+                        <div style="display:flex; gap:4px; white-space:nowrap;">
+                            @if ($en->status === \App\Enums\EnrollmentStatus::Provisional)
+                                <x-btn size="sm" variant="primary" wire:click="activate({{ $en->id }})">Complete</x-btn>
+                            @endif
+                            @if ($en->status !== \App\Enums\EnrollmentStatus::Withdrawn)
+                                <x-btn size="sm" variant="secondary" wire:click="openWithdraw({{ $en->id }})">Withdraw</x-btn>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            @if ($withdrawId)
+                <div class="detail-section">
+                    <div class="detail-section__title">Withdraw enrollment</div>
+                    <x-field name="withdrawReason" label="Reason" wire:model="withdrawReason" />
+                    <div style="display:flex; gap: var(--space-2); margin-top: var(--space-2);">
+                        <x-btn variant="primary" wire:click="withdraw">Confirm withdraw</x-btn>
+                        <x-btn variant="secondary" wire:click="$set('withdrawId', null)">Cancel</x-btn>
+                    </div>
+                </div>
+            @endif
+        @endif
+
+        <x-slot:footer>
+            <a class="btn btn--sm btn--secondary" href="{{ url('/id-cards') }}">ID card</a>
+            <a class="btn btn--sm btn--secondary" href="{{ url('/fees') }}">Fees</a>
+        </x-slot:footer>
+    </x-drawer>
 </div>

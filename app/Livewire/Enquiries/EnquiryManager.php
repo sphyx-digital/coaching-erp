@@ -36,10 +36,13 @@ class EnquiryManager extends Component
 
     public ?int $course_id = null;
 
-    // Action panel (follow-up note or lost reason)
-    public ?int $panelId = null;
+    // Detail drawer
+    public bool $viewing = false;
 
-    public string $panelMode = '';   // note | lost
+    public ?int $viewingId = null;
+
+    // Action panel (follow-up note or lost reason), shown inside the drawer
+    public string $panelMode = '';   // '' | note | lost
 
     public string $panelText = '';
 
@@ -48,6 +51,20 @@ class EnquiryManager extends Component
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('enquiry.view'), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+        $this->reset(['panelMode', 'panelText', 'panelFollowUp']);
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->reset(['viewingId', 'panelMode', 'panelText', 'panelFollowUp']);
+        }
     }
 
     public function getIsDuplicateProperty(): bool
@@ -102,9 +119,8 @@ class EnquiryManager extends Component
         }
     }
 
-    public function openPanel(int $id, string $mode): void
+    public function openPanel(string $mode): void
     {
-        $this->panelId = $id;
         $this->panelMode = $mode;
         $this->panelText = '';
         $this->panelFollowUp = null;
@@ -112,13 +128,13 @@ class EnquiryManager extends Component
 
     public function closePanel(): void
     {
-        $this->reset(['panelId', 'panelMode', 'panelText', 'panelFollowUp']);
+        $this->reset(['panelMode', 'panelText', 'panelFollowUp']);
     }
 
     public function savePanel(EnquiryService $service): void
     {
         abort_unless(Auth::user()?->can('enquiry.update'), 403);
-        $enquiry = Enquiry::findOrFail($this->panelId);
+        $enquiry = Enquiry::findOrFail($this->viewingId);
 
         if ($this->panelMode === 'lost') {
             $service->transition($enquiry, EnquiryStatus::Lost, $this->panelText ?: null);
@@ -151,10 +167,15 @@ class EnquiryManager extends Component
         $today = now()->toDateString();
         $sessionId = active_session()?->id;
 
+        $record = $this->viewingId
+            ? Enquiry::with(['course', 'branch', 'counsellor', 'convertedStudent', 'activities' => fn ($q) => $q->latest()])->find($this->viewingId)
+            : null;
+
         return view('livewire.enquiries.enquiry-manager', [
             'branches' => Branch::where('is_active', true)->orderBy('name')->pluck('name', 'id'),
             'courses' => Course::where('is_active', true)->orderBy('name')->pluck('name', 'id'),
             'enquiries' => $this->filteredEnquiries(),
+            'record' => $record,
             'dueToday' => Enquiry::dueBy($today)->with('course')->orderBy('next_follow_up_on')->get(),
             'kpiOpen' => Enquiry::open()->count(),
             'kpiDue' => Enquiry::dueBy($today)->count(),
