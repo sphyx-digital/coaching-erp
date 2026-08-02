@@ -25,12 +25,12 @@
         @else
             <x-data-table :head="['Batch', 'Course', 'Teacher', ['label' => 'Filled', 'num' => true], '']">
                 @foreach ($batches as $batch)
-                    <tr wire:key="batch-{{ $batch->id }}" class="is-clickable" wire:click="view({{ $batch->id }})" tabindex="0" wire:keydown.enter="view({{ $batch->id }})">
+                    <tr wire:key="batch-{{ $batch->id }}">
                         <td>{{ $batch->name }}</td>
                         <td>{{ $batch->course?->name }}</td>
                         <td>{{ $batch->teacher?->name ?: '—' }}</td>
                         <td class="num">{{ $batch->live_count }}{{ $batch->capacity ? ' / '.$batch->capacity : '' }}</td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td><div class="row-actions"><x-btn size="sm" variant="secondary" wire:click="view({{ $batch->id }})">View</x-btn></div></td>
                     </tr>
                 @endforeach
             </x-data-table>

@@ -44,12 +44,17 @@
 
     @if ($provisional->isNotEmpty())
         <x-card title="Provisional (from enquiry conversions)">
-            <x-data-table :head="['Name', 'Course', '']">
+            <x-data-table :head="['Name', 'Course', 'Actions']">
                 @foreach ($provisional as $e)
-                    <tr wire:key="prov-{{ $e->id }}" class="is-clickable" wire:click="viewProfile({{ $e->student_id }})" tabindex="0" wire:keydown.enter="viewProfile({{ $e->student_id }})">
+                    <tr wire:key="prov-{{ $e->id }}">
                         <td>{{ $e->student?->name }}</td>
                         <td>{{ $e->course?->name }}</td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td>
+                            <div class="row-actions">
+                                <x-btn size="sm" variant="secondary" wire:click="viewProfile({{ $e->student_id }})">View</x-btn>
+                                <x-btn size="sm" variant="primary" wire:click="activate({{ $e->id }})">Complete</x-btn>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </x-data-table>
@@ -60,14 +65,21 @@
         @if ($enrollments->isEmpty())
             <x-state title="No admissions yet">Admit a student above or complete a provisional conversion.</x-state>
         @else
-            <x-data-table :head="['Admission #', 'Name', 'Course', 'Status', '']">
+            <x-data-table :head="['Admission #', 'Name', 'Course', 'Status', 'Actions']">
                 @foreach ($enrollments as $e)
-                    <tr wire:key="enr-{{ $e->id }}" class="is-clickable" wire:click="viewProfile({{ $e->student_id }})" tabindex="0" wire:keydown.enter="viewProfile({{ $e->student_id }})">
+                    <tr wire:key="enr-{{ $e->id }}">
                         <td>{{ $e->student?->admission_number ?: '—' }}</td>
                         <td>{{ $e->student?->name }}</td>
                         <td>{{ $e->course?->name }}</td>
                         <td><x-pill :variant="$e->status->pillVariant()">{{ $e->status->label() }}</x-pill></td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td>
+                            <div class="row-actions">
+                                <x-btn size="sm" variant="secondary" wire:click="viewProfile({{ $e->student_id }})">View</x-btn>
+                                @if ($e->status !== \App\Enums\EnrollmentStatus::Withdrawn)
+                                    <x-btn size="sm" variant="secondary" wire:click="openWithdraw({{ $e->id }})">Withdraw</x-btn>
+                                @endif
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </x-data-table>

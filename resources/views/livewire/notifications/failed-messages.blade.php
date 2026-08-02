@@ -8,7 +8,7 @@
         @else
             <x-data-table :head="['When', 'Channel', 'To', 'Status', 'Reason', '']">
                 @foreach ($messages as $m)
-                    <tr wire:key="msg-{{ $m->id }}" class="is-clickable" wire:click="view({{ $m->id }})" tabindex="0" wire:keydown.enter="view({{ $m->id }})">
+                    <tr wire:key="msg-{{ $m->id }}">
                         <td class="num">{{ $m->created_at?->format('d-m-Y H:i') }}</td>
                         <td>{{ ucfirst($m->channel) }}</td>
                         <td>{{ $m->recipient ?: '—' }}</td>
@@ -17,7 +17,12 @@
                             <x-pill :variant="$v">{{ ucfirst($m->status) }}</x-pill>
                         </td>
                         <td class="field__hint">{{ \Illuminate\Support\Str::limit($m->error, 40) ?: '—' }}</td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td>
+                            <div class="row-actions">
+                                <x-btn size="sm" variant="secondary" wire:click="view({{ $m->id }})">View</x-btn>
+                                @if ($m->status === 'failed')<x-btn size="sm" variant="secondary" wire:click="retry({{ $m->id }})">Retry</x-btn>@endif
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </x-data-table>

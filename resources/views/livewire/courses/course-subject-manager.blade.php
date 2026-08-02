@@ -27,12 +27,12 @@
         @else
             <x-data-table :head="['Name', 'Code', 'Duration', ['label' => 'Subjects', 'num' => true], '']">
                 @foreach ($courses as $course)
-                    <tr wire:key="course-{{ $course->id }}" class="is-clickable" wire:click="view({{ $course->id }})" tabindex="0" wire:keydown.enter="view({{ $course->id }})">
+                    <tr wire:key="course-{{ $course->id }}">
                         <td>{{ $course->name }}</td>
                         <td>{{ $course->code }}</td>
                         <td>{{ $course->duration_months ? $course->duration_months.' mo' : '—' }}</td>
                         <td class="num">{{ $course->subjects_count }}</td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td><div class="row-actions"><x-btn size="sm" variant="secondary" wire:click="view({{ $course->id }})">View</x-btn></div></td>
                     </tr>
                 @endforeach
             </x-data-table>

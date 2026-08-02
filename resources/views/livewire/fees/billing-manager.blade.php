@@ -122,11 +122,11 @@
         @else
             <x-data-table :head="['Invoice', 'Student', ['label' => 'Balance', 'num' => true], '']">
                 @foreach ($topOutstanding as $inv)
-                    <tr wire:key="out-{{ $inv->id }}" class="is-clickable" wire:click="$set('studentId', {{ $inv->student_id }})" tabindex="0" wire:keydown.enter="$set('studentId', {{ $inv->student_id }})">
+                    <tr wire:key="out-{{ $inv->id }}">
                         <td>{{ $inv->invoice_number }}</td>
                         <td>{{ $inv->student?->name }}</td>
                         <td class="num">{{ paise_to_rupees($inv->balance) }}</td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td><div class="row-actions"><x-btn size="sm" variant="secondary" wire:click="$set('studentId', {{ $inv->student_id }})">Open ledger</x-btn></div></td>
                     </tr>
                 @endforeach
             </x-data-table>

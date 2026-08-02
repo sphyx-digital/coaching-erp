@@ -10,13 +10,13 @@
         @else
             <x-data-table :head="['When', 'Action', 'Record', 'By', 'Detail', '']">
                 @foreach ($entries as $e)
-                    <tr wire:key="ov-{{ $e->id }}" class="is-clickable" wire:click="view({{ $e->id }})" tabindex="0" wire:keydown.enter="view({{ $e->id }})">
+                    <tr wire:key="ov-{{ $e->id }}">
                         <td class="num">{{ $e->created_at?->format('d-m-Y H:i') }}</td>
                         <td><x-pill variant="warning">{{ $e->action }}</x-pill></td>
                         <td>{{ class_basename($e->auditable_type) }} #{{ $e->auditable_id }}</td>
                         <td>{{ $e->user?->name ?: 'System' }}</td>
                         <td class="field__hint">{{ \Illuminate\Support\Str::limit(json_encode($e->after), 50) }}</td>
-                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                        <td><div class="row-actions"><x-btn size="sm" variant="secondary" wire:click="view({{ $e->id }})">View</x-btn></div></td>
                     </tr>
                 @endforeach
             </x-data-table>
