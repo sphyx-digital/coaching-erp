@@ -1,0 +1,51 @@
+name: Deploy
+
+# Tag a release (e.g. v1.2.0) to deploy that tag to a client's cPanel account.
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - name: Install production dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Set up Node & build assets
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci && npm run build
+
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${{ secrets.DEPLOY_PORT }}" "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync to cPanel
+        run: |
+          rsync -az --delete \
+            --exclude='.git' --exclude='.env' --exclude='storage/app' \
+            --exclude='storage/logs' --exclude='node_modules' \
+            -e "ssh -p ${{ secrets.DEPLOY_PORT }}" \
+            ./ "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}/"
+
+      - name: Migrate & cache on server
+        run: |
+          ssh -p "${{ secrets.DEPLOY_PORT }}" "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "cd ${{ secrets.DEPLOY_PATH }} && ${{ secrets.DEPLOY_PHP }} artisan migrate --force && ${{ secrets.DEPLOY_PHP }} artisan config:clear && ${{ secrets.DEPLOY_PHP }} artisan view:clear"
+
+# Required repo secrets: DEPLOY_SSH_KEY, DEPLOY_HOST, DEPLOY_PORT, DEPLOY_USER,
+# DEPLOY_PATH (e.g. /home/<acct>/coaching-erp), DEPLOY_PHP (php 8.2 CLI path).
