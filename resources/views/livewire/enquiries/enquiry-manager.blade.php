@@ -63,32 +63,55 @@
                 @endforeach
             </div>
 
+            {{-- Bulk actions bar --}}
+            @if ($this->selectedCount())
+                <div class="bulkbar">
+                    <span class="bulkbar__count">{{ $this->selectedCount() }} selected</span>
+                    <x-btn size="sm" variant="secondary" wire:click="bulkStatus('contacted')">Mark contacted</x-btn>
+                    <x-btn size="sm" variant="secondary" wire:click="bulkStatus('follow_up')">Mark follow-up</x-btn>
+                    <x-btn size="sm" variant="secondary" wire:click="bulkStatus('lost')">Mark lost</x-btn>
+                    <span class="bulkbar__spacer"></span>
+                    <x-btn size="sm" variant="secondary" wire:click="clearSelection">Clear</x-btn>
+                </div>
+            @endif
+
             <div class="table-wrap">
                 <table class="table table--dense">
                     <thead>
                         <tr>
+                            <th class="col-check"><input type="checkbox" aria-label="Select all"
+                                @change="$event.target.checked ? $wire.selectAllVisible() : $wire.clearSelection()"
+                                @checked($this->selectedCount() && $this->selectedCount() === count($enquiries))></th>
                             <x-th field="enquiry_number" :sort="$sortField" :dir="$sortDir">Enquiry</x-th>
                             <x-th field="name" :sort="$sortField" :dir="$sortDir">Name</x-th>
                             <th>Course</th>
                             <th>Branch</th>
                             <th>Follow-up</th>
                             <x-th field="status" :sort="$sortField" :dir="$sortDir">Status</x-th>
-                            <th></th>
+                            <th style="text-align:right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     @forelse ($enquiries as $e)
-                        <tr wire:key="enq-{{ $e->id }}" class="is-clickable" wire:click="view({{ $e->id }})" tabindex="0" wire:keydown.enter="view({{ $e->id }})">
+                        <tr wire:key="enq-{{ $e->id }}">
+                            <td class="col-check"><input type="checkbox" value="{{ $e->id }}" wire:model.live="selected" aria-label="Select {{ $e->name }}"></td>
                             <td>{{ $e->enquiry_number }}</td>
                             <td>{{ $e->name }}<br><span class="field__hint">{{ $e->phone ?: '—' }}</span></td>
                             <td>{{ $e->course?->name ?: '—' }}</td>
                             <td>{{ $e->branch?->name ?: '—' }}</td>
                             <td>{{ $e->next_follow_up_on?->format('d-m-Y') ?: '—' }}</td>
                             <td><x-pill :variant="$e->status->pillVariant()">{{ $e->status->label() }}</x-pill></td>
-                            <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                            <td>
+                                <div class="row-actions">
+                                    <x-btn size="sm" variant="secondary" wire:click="view({{ $e->id }})">View</x-btn>
+                                    @if (! $e->status->isTerminal() && $e->status !== \App\Enums\EnquiryStatus::Lost)
+                                        <x-btn size="sm" variant="primary" wire:click="convert({{ $e->id }})">Convert</x-btn>
+                                    @endif
+                                </div>
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7"><x-state title="No enquiries found">Try a different search or filter.</x-state></td></tr>
+                        <tr><td colspan="8"><x-state title="No enquiries found">Try a different search or filter.</x-state></td></tr>
                     @endforelse
                     </tbody>
                 </table>

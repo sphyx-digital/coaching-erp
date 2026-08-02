@@ -3,6 +3,7 @@
 namespace App\Livewire\Enquiries;
 
 use App\Enums\EnquiryStatus;
+use App\Livewire\Concerns\WithBulkSelect;
 use App\Livewire\Concerns\WithTableTools;
 use App\Models\Branch;
 use App\Models\Course;
@@ -15,7 +16,7 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class EnquiryManager extends Component
 {
-    use WithTableTools;
+    use WithBulkSelect, WithTableTools;
 
     public string $statusFilter = '';
 
@@ -107,6 +108,26 @@ class EnquiryManager extends Component
         $service->transition(Enquiry::findOrFail($id), EnquiryStatus::from($status));
     }
 
+    /** Bulk status transition for the selected enquiries (skips invalid ones). */
+    public function bulkStatus(string $status, EnquiryService $service): void
+    {
+        abort_unless(Auth::user()?->can('enquiry.update'), 403);
+        $to = EnquiryStatus::from($status);
+
+        foreach (Enquiry::whereIn('id', $this->selectedIds())->get() as $e) {
+            if ($e->status !== $to && $e->status->canTransitionTo($to)) {
+                try {
+                    $service->transition($e, $to);
+                } catch (\Throwable) {
+                }
+            }
+        }
+
+        $count = $this->selectedCount();
+        $this->clearSelection();
+        session()->flash('ok', "Updated {$count} enquiries.");
+    }
+
     public function convert(int $id, EnquiryService $service): void
     {
         abort_unless(Auth::user()?->can('admission.create'), 403);
@@ -171,10 +192,13 @@ class EnquiryManager extends Component
             ? Enquiry::with(['course', 'branch', 'counsellor', 'convertedStudent', 'activities' => fn ($q) => $q->latest()])->find($this->viewingId)
             : null;
 
+        $enquiries = $this->filteredEnquiries();
+        $this->pageIds = $enquiries->pluck('id')->all();
+
         return view('livewire.enquiries.enquiry-manager', [
             'branches' => Branch::where('is_active', true)->orderBy('name')->pluck('name', 'id'),
             'courses' => Course::where('is_active', true)->orderBy('name')->pluck('name', 'id'),
-            'enquiries' => $this->filteredEnquiries(),
+            'enquiries' => $enquiries,
             'record' => $record,
             'dueToday' => Enquiry::dueBy($today)->with('course')->orderBy('next_follow_up_on')->get(),
             'kpiOpen' => Enquiry::open()->count(),

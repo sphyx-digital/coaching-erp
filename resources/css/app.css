@@ -196,6 +196,13 @@ a { color: var(--action); text-underline-offset: 2px; }
 .timeline li::before { content: ''; position: absolute; left: -5px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--action); }
 .timeline .t-when { font-size: var(--text-xs); color: var(--text-subtle); }
 
+/* Bulk-actions bar (appears when rows are selected) */
+.bulkbar { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; padding: var(--space-2) var(--space-3); margin-bottom: var(--space-3); background: color-mix(in srgb, var(--brand-hue) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--brand-hue) 24%, transparent); border-radius: var(--radius-md); }
+.bulkbar__count { font-weight: var(--weight-semibold); font-size: var(--text-sm); }
+.bulkbar__spacer { flex: 1; }
+.table td.col-check, .table th.col-check { width: 34px; text-align: center; padding-left: var(--space-2); padding-right: 0; }
+.row-actions { display: flex; gap: 4px; justify-content: flex-end; flex-wrap: wrap; }
+
 /* Clickable table rows (whole-row opens the detail drawer) */
 .table tbody tr.is-clickable { cursor: pointer; }
 .table tbody tr.is-clickable:hover { background: var(--surface-sunken); }
