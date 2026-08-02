@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             WebsiteContentSeeder::class,
             ExamDemoSeeder::class,
             MaterialDemoSeeder::class,
+            HrDemoSeeder::class,
         ]);
     }
 }

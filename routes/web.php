@@ -3,6 +3,7 @@
 use App\Http\Controllers\IdCardController;
 use App\Http\Controllers\ImportTemplateController;
 use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\PortalPaymentController;
 use App\Http\Controllers\PublicSiteController;
 use App\Http\Controllers\ReceiptController;
@@ -21,6 +22,8 @@ use App\Livewire\Exams\ExamManager;
 use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
+use App\Livewire\Hr\PayrollManager;
+use App\Livewire\Hr\StaffAttendanceRegister;
 use App\Livewire\IdCards\IdCardManager;
 use App\Livewire\Import\ImportManager;
 use App\Livewire\Materials\MaterialManager;
@@ -110,6 +113,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses', CourseSubjectManager::class)->name('courses');
     Route::get('/sessions', SessionManager::class)->name('sessions');
     Route::get('/staff', StaffManager::class)->name('staff');
+    Route::get('/staff-attendance', StaffAttendanceRegister::class)->name('staff-attendance');
+    Route::get('/payroll', PayrollManager::class)->name('payroll');
+    Route::get('/payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
     Route::get('/website', WebsiteManager::class)->name('website');
 
     Route::view('/ui', 'ui.gallery')->name('ui.gallery');
