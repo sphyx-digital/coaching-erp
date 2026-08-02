@@ -18,13 +18,14 @@
             @if ($invoices->isEmpty())
                 <x-state title="No invoices">Your fee invoices will appear here.</x-state>
             @else
-                <x-data-table :head="['Invoice', ['label' => 'Total', 'num' => true], ['label' => 'Balance', 'num' => true], 'Status']">
+                <x-data-table :head="['Invoice', ['label' => 'Total', 'num' => true], ['label' => 'Balance', 'num' => true], 'Status', '']">
                     @foreach ($invoices as $inv)
                         <tr>
                             <td>{{ $inv->invoice_number }}</td>
                             <td class="num">{{ paise_to_rupees($inv->total) }}</td>
                             <td class="num">{{ paise_to_rupees($inv->balance) }}</td>
                             <td>@php($v = $inv->status === 'paid' ? 'success' : ($inv->status === 'partial' ? 'warning' : 'info'))<x-pill :variant="$v">{{ ucfirst($inv->status) }}</x-pill></td>
+                            <td>@if ($canPay && $inv->balance > 0)<a class="btn btn--sm btn--primary" href="{{ url('/portal/pay/'.$inv->id) }}">Pay</a>@endif</td>
                         </tr>
                     @endforeach
                 </x-data-table>

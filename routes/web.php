@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\PortalPaymentController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReportCardController;
 use App\Http\Controllers\ReportExportController;
@@ -15,6 +17,7 @@ use App\Livewire\Enquiries\EnquiryManager;
 use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
+use App\Livewire\Notifications\FailedMessages;
 use App\Livewire\Portal\PortalAttendance;
 use App\Livewire\Portal\PortalFees;
 use App\Livewire\Portal\PortalHome;
@@ -26,6 +29,9 @@ use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
 use App\Livewire\Timetable\TimetableManager;
 use Illuminate\Support\Facades\Route;
+
+// Gateway webhook (signature-verified, no auth/CSRF).
+Route::post('/webhooks/payment', [PaymentWebhookController::class, 'handle'])->name('webhooks.payment');
 
 // Public landing: a sign-in gateway. Authenticated users go to their home.
 Route::get('/', function () {
@@ -46,6 +52,7 @@ Route::middleware('auth')->prefix('portal')->group(function () {
     Route::get('/attendance', PortalAttendance::class)->name('portal.attendance');
     Route::get('/results', PortalResults::class)->name('portal.results');
     Route::get('/timetable', PortalTimetable::class)->name('portal.timetable');
+    Route::get('/pay/{invoice}', [PortalPaymentController::class, 'pay'])->name('portal.pay');
 });
 
 // Authenticated back office (modules light up phase by phase).
@@ -66,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/overrides', OverrideLog::class)->name('overrides');
     Route::get('/reports', Reports::class)->name('reports');
     Route::get('/reports/export/{report}', [ReportExportController::class, 'export'])->name('reports.export');
+    Route::get('/messages', FailedMessages::class)->name('messages');
     Route::get('/receipts/{payment}', [ReceiptController::class, 'show'])->name('receipts.show');
 
     Route::get('/settings', SettingsManager::class)->name('settings');

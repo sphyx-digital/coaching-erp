@@ -59,6 +59,7 @@
     @if ($u?->can('settings.view'))
         <div class="nav-rail__section">System</div>
         <a class="nav-rail__link" href="{{ url('/settings') }}" {!! $link('settings') !!} title="Settings"><x-icon name="settings" /><span class="nav-rail__label">Settings</span></a>
+        <a class="nav-rail__link" href="{{ url('/messages') }}" {!! $link('messages') !!} title="Message delivery"><x-icon name="enquiry" /><span class="nav-rail__label">Messages</span></a>
         <a class="nav-rail__link" href="{{ url('/ui') }}" {!! $link('ui') !!} title="Components"><x-icon name="components" /><span class="nav-rail__label">Components</span></a>
     @endif
 </nav>
