@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             PlatformAdminSeeder::class,
             DemoDataSeeder::class,
             WebsiteContentSeeder::class,
+            ExamDemoSeeder::class,
         ]);
     }
 }

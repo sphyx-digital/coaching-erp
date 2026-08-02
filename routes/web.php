@@ -17,6 +17,7 @@ use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Dashboard;
 use App\Livewire\Enquiries\EnquiryManager;
+use App\Livewire\Exams\ExamManager;
 use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Fees\FeeSetupManager;
@@ -24,6 +25,8 @@ use App\Livewire\IdCards\IdCardManager;
 use App\Livewire\Import\ImportManager;
 use App\Livewire\Notifications\FailedMessages;
 use App\Livewire\Portal\PortalAttendance;
+use App\Livewire\Portal\PortalExamAttempt;
+use App\Livewire\Portal\PortalExams;
 use App\Livewire\Portal\PortalFees;
 use App\Livewire\Portal\PortalHome;
 use App\Livewire\Portal\PortalResults;
@@ -66,6 +69,8 @@ Route::middleware('auth')->prefix('portal')->group(function () {
     Route::get('/attendance', PortalAttendance::class)->name('portal.attendance');
     Route::get('/results', PortalResults::class)->name('portal.results');
     Route::get('/timetable', PortalTimetable::class)->name('portal.timetable');
+    Route::get('/exams', PortalExams::class)->name('portal.exams');
+    Route::get('/exams/{exam}', PortalExamAttempt::class)->name('portal.exam');
     Route::get('/pay/{invoice}', [PortalPaymentController::class, 'pay'])->name('portal.pay');
 });
 
@@ -80,6 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/timetable', TimetableManager::class)->name('timetable');
     Route::get('/attendance', AttendanceRegister::class)->name('attendance');
     Route::get('/assessments', AssessmentManager::class)->name('assessments');
+    Route::get('/exams', ExamManager::class)->name('exams');
     Route::get('/report-cards/{assessment}/{student}', [ReportCardController::class, 'show'])->name('report-cards.show');
 
     Route::get('/id-cards', IdCardManager::class)->name('id-cards');

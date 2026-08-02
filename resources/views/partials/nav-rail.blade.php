@@ -40,6 +40,7 @@
 
     @if ($u?->can('assessment.view'))
         <a class="nav-rail__link" href="{{ url('/assessments') }}" {!! $link('assessments') !!} title="Assessments"><x-icon name="assessment" /><span class="nav-rail__label">Assessments</span></a>
+        <a class="nav-rail__link" href="{{ url('/exams') }}" {!! $link('exams') !!} title="Online exams"><x-icon name="assessment" /><span class="nav-rail__label">Online exams</span></a>
     @endif
 
     @if ($u?->can('fee.view'))

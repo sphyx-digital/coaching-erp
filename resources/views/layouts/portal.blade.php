@@ -40,6 +40,7 @@
     <a class="portal-tab" href="{{ url('/portal/fees') }}" {!! $tab('portal/fees') !!}><span>Fees</span></a>
     <a class="portal-tab" href="{{ url('/portal/attendance') }}" {!! $tab('portal/attendance') !!}><span>Attendance</span></a>
     <a class="portal-tab" href="{{ url('/portal/results') }}" {!! $tab('portal/results') !!}><span>Results</span></a>
+    <a class="portal-tab" href="{{ url('/portal/exams') }}" {!! $tab('portal/exams*') !!}><span>Exams</span></a>
     <a class="portal-tab" href="{{ url('/portal/timetable') }}" {!! $tab('portal/timetable') !!}><span>Timetable</span></a>
 </nav>
 
