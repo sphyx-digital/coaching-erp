@@ -17,6 +17,9 @@
     @if ($u && ! $u->isPortalUser())
         <a class="nav-rail__link" href="{{ url('/approvals') }}" {!! $link('approvals') !!} title="Approvals"><x-icon name="attendance" /><span class="nav-rail__label">Approvals</span></a>
     @endif
+    @if ($u?->can('report.view'))
+        <a class="nav-rail__link" href="{{ url('/reports') }}" {!! $link('reports') !!} title="Reports"><x-icon name="dashboard" /><span class="nav-rail__label">Reports</span></a>
+    @endif
 
     @if ($u?->can('enquiry.view') || $u?->can('admission.view'))
         <div class="nav-rail__section">Admissions</div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReportCardController;
+use App\Http\Controllers\ReportExportController;
 use App\Livewire\Admissions\AdmissionsManager;
 use App\Livewire\Approvals\ApprovalInbox;
 use App\Livewire\Assessments\AssessmentManager;
@@ -19,6 +20,7 @@ use App\Livewire\Portal\PortalFees;
 use App\Livewire\Portal\PortalHome;
 use App\Livewire\Portal\PortalResults;
 use App\Livewire\Portal\PortalTimetable;
+use App\Livewire\Reports\Reports;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
 use App\Livewire\Staff\StaffManager;
@@ -62,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/fees', BillingManager::class)->name('fees');
     Route::get('/fees/setup', FeeSetupManager::class)->name('fees.setup');
     Route::get('/overrides', OverrideLog::class)->name('overrides');
+    Route::get('/reports', Reports::class)->name('reports');
+    Route::get('/reports/export/{report}', [ReportExportController::class, 'export'])->name('reports.export');
     Route::get('/receipts/{payment}', [ReceiptController::class, 'show'])->name('receipts.show');
 
     Route::get('/settings', SettingsManager::class)->name('settings');
