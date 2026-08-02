@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Livewire\Approvals\ApprovalInbox;
 use App\Livewire\Batches\BatchManager;
 use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
+use App\Livewire\Exceptions\OverrideLog;
 use App\Livewire\Fees\BillingManager;
 use App\Livewire\Materials\MaterialManager;
+use App\Livewire\Notifications\FailedMessages;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Staff\StaffManager;
 use App\Models\AcademicSession;
@@ -14,6 +17,7 @@ use App\Models\Batch;
 use App\Models\Branch;
 use App\Models\Course;
 use App\Models\Institute;
+use App\Models\MessageLog;
 use App\Models\Staff;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
@@ -102,5 +106,25 @@ class DrawerRolloutTest extends TestCase
         $c = Livewire::actingAs($this->admin)->test(BillingManager::class)->assertOk();
         // selecting a student id loads their ledger without error
         $c->set('studentId', null)->assertOk();
+    }
+
+    public function test_log_screens_render_with_drawers(): void
+    {
+        Livewire::actingAs($this->admin)->test(OverrideLog::class)->assertOk();
+        Livewire::actingAs($this->admin)->test(FailedMessages::class)->assertOk();
+        Livewire::actingAs($this->admin)->test(ApprovalInbox::class)->assertOk();
+    }
+
+    public function test_message_log_row_opens_drawer(): void
+    {
+        $log = MessageLog::create([
+            'institute_id' => $this->institute->id, 'channel' => 'email', 'recipient' => 'a@b.c',
+            'subject' => 'Test', 'body' => 'Hello', 'status' => 'failed', 'error' => 'SMTP timeout',
+        ]);
+
+        Livewire::actingAs($this->admin)->test(FailedMessages::class)
+            ->call('view', $log->id)
+            ->assertSet('viewing', true)
+            ->assertSee('SMTP timeout');
     }
 }

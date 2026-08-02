@@ -263,9 +263,40 @@ a { color: var(--action); text-underline-offset: 2px; }
 .ring__inner { width: 78px; height: 78px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); font-variant-numeric: tabular-nums; }
 .due-banner { background: var(--danger-tint); color: var(--danger); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
 
-/* Mobile: rail collapses (portal is mobile-first; back office is desktop-first) */
-@media (max-width: 800px) {
-  .app-shell { grid-template-columns: 1fr; }
-  .nav-rail { position: static; height: auto; flex-direction: row; overflow-x: auto; }
-  .nav-rail__section, .nav-rail__brand { display: none; }
+/* Mobile: the rail becomes an off-canvas drawer, content goes full width. */
+@media (max-width: 860px) {
+  html, body { overflow-x: hidden; }
+  .app-shell, .app-shell.is-collapsed { grid-template-columns: 1fr; }
+
+  .nav-rail {
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 130;
+    width: min(82vw, var(--rail-width)); flex-direction: column; overflow-y: auto;
+    transform: translateX(-100%); transition: transform var(--motion-base) var(--ease-out);
+  }
+  .app-shell.nav-open .nav-rail { transform: none; }
+  .nav-backdrop { position: fixed; inset: 0; background: rgba(21,24,33,.45); z-index: 125; }
+
+  /* Always show full labels in the off-canvas, even if desktop pref was collapsed. */
+  .is-collapsed .nav-rail__label,
+  .is-collapsed .nav-rail__name,
+  .is-collapsed .nav-rail__section { display: revert; }
+  .is-collapsed .nav-rail__link { justify-content: flex-start; padding: var(--space-2); }
+  .is-collapsed .nav-rail__link::after { content: none; } /* no icon tooltip on mobile */
+  .is-collapsed .nav-rail__brand { justify-content: space-between; }
+  .is-collapsed .nav-rail__toggle { display: none; }
+
+  .topbar { position: sticky; top: 0; z-index: 20; background: var(--surface); }
+  .app-content { padding: var(--space-3); }
+  .container-narrow { max-width: 100%; }
+
+  /* Detail drawers cover the screen on phones. */
+  .drawer, .drawer--wide { max-width: 100%; }
+
+  /* KPI/summary grids stack cleanly. */
+  .grid-cards { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .grid-cards { grid-template-columns: 1fr; }
+  .page-header { flex-wrap: wrap; gap: var(--space-2); }
 }

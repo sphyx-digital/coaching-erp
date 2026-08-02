@@ -15,9 +15,27 @@ class ApprovalInbox extends Component
 
     public string $reason = '';
 
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         abort_if(Auth::user()?->isPortalUser(), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+        $this->reset(['rejectId', 'reason']);
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->reset(['viewingId', 'rejectId', 'reason']);
+        }
     }
 
     public function approve(int $id, ApprovalService $service): void
@@ -55,6 +73,7 @@ class ApprovalInbox extends Component
 
         return view('livewire.approvals.approval-inbox', [
             'pending' => $q->latest()->get(),
+            'record' => $this->viewingId ? Approval::with('requester')->find($this->viewingId) : null,
         ]);
     }
 }

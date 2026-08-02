@@ -15,13 +15,15 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-<div class="app-shell" x-data="{ collapsed: localStorage.getItem('navCollapsed') === '1' }"
-     :class="{ 'is-collapsed': collapsed }" x-effect="localStorage.setItem('navCollapsed', collapsed ? '1' : '0')">
+<div class="app-shell" x-data="{ collapsed: localStorage.getItem('navCollapsed') === '1', mobileOpen: false }"
+     :class="{ 'is-collapsed': collapsed, 'nav-open': mobileOpen }"
+     x-effect="localStorage.setItem('navCollapsed', collapsed ? '1' : '0')">
     @include('partials.nav-rail')
+    <div class="nav-backdrop" x-show="mobileOpen" x-cloak @click="mobileOpen = false"></div>
 
     <div class="app-main">
         <header class="topbar">
-            <button type="button" class="topbar__burger" @click="collapsed = !collapsed" aria-label="Toggle menu">
+            <button type="button" class="topbar__burger" @click="collapsed = !collapsed; mobileOpen = !mobileOpen" aria-label="Toggle menu">
                 <x-icon name="components" />
             </button>
             <div class="topbar__title">@yield('title', 'Dashboard')</div>

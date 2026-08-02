@@ -20,9 +20,26 @@ class OverrideLog extends Component
         'approval.approved', 'approval.rejected', 'approval.escalated',
     ];
 
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         abort_unless(Auth::user()?->hasAllBranchAccess() || Auth::user()?->can('fee.view'), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->viewingId = null;
+        }
     }
 
     public function render()
@@ -35,6 +52,7 @@ class OverrideLog extends Component
 
         return view('livewire.exceptions.override-log', [
             'entries' => $q->latest()->limit(200)->get(),
+            'record' => $this->viewingId ? AuditLog::with('user')->find($this->viewingId) : null,
         ]);
     }
 }

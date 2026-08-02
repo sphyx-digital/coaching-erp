@@ -11,9 +11,26 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class FailedMessages extends Component
 {
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         abort_unless(Auth::user()?->hasAllBranchAccess() || Auth::user()?->can('settings.view'), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->viewingId = null;
+        }
     }
 
     public function retry(int $id, NotificationService $service): void
@@ -27,6 +44,7 @@ class FailedMessages extends Component
     {
         return view('livewire.notifications.failed-messages', [
             'messages' => MessageLog::whereIn('status', ['failed', 'queued', 'skipped'])->latest()->limit(200)->get(),
+            'record' => $this->viewingId ? MessageLog::find($this->viewingId) : null,
         ]);
     }
 }
