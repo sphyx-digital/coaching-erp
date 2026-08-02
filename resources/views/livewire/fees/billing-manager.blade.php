@@ -120,12 +120,13 @@
         @if ($topOutstanding->isEmpty())
             <x-state title="All clear">No outstanding balances.</x-state>
         @else
-            <x-data-table :head="['Invoice', 'Student', ['label' => 'Balance', 'num' => true]]">
+            <x-data-table :head="['Invoice', 'Student', ['label' => 'Balance', 'num' => true], '']">
                 @foreach ($topOutstanding as $inv)
-                    <tr wire:key="out-{{ $inv->id }}">
+                    <tr wire:key="out-{{ $inv->id }}" class="is-clickable" wire:click="$set('studentId', {{ $inv->student_id }})" tabindex="0" wire:keydown.enter="$set('studentId', {{ $inv->student_id }})">
                         <td>{{ $inv->invoice_number }}</td>
                         <td>{{ $inv->student?->name }}</td>
                         <td class="num">{{ paise_to_rupees($inv->balance) }}</td>
+                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
                     </tr>
                 @endforeach
             </x-data-table>

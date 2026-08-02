@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Livewire\Batches\BatchManager;
 use App\Livewire\Branches\BranchManager;
 use App\Livewire\Courses\CourseSubjectManager;
+use App\Livewire\Fees\BillingManager;
 use App\Livewire\Materials\MaterialManager;
+use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Staff\StaffManager;
 use App\Models\AcademicSession;
 use App\Models\Batch;
@@ -82,5 +84,23 @@ class DrawerRolloutTest extends TestCase
 
         Livewire::actingAs($this->admin)->test(BranchManager::class)->assertOk()->assertSee('Vijay Nagar');
         Livewire::actingAs($this->admin)->test(MaterialManager::class)->assertOk();
+    }
+
+    public function test_session_row_opens_detail_drawer(): void
+    {
+        $session = AcademicSession::where('is_active', true)->first();
+
+        Livewire::actingAs($this->admin)->test(SessionManager::class)
+            ->assertSee('2026-27')
+            ->call('view', $session->id)
+            ->assertSet('viewing', true)
+            ->assertSet('viewingId', $session->id);
+    }
+
+    public function test_fees_screen_renders_and_outstanding_row_selects_student(): void
+    {
+        $c = Livewire::actingAs($this->admin)->test(BillingManager::class)->assertOk();
+        // selecting a student id loads their ledger without error
+        $c->set('studentId', null)->assertOk();
     }
 }

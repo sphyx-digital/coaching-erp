@@ -17,9 +17,26 @@ class SessionManager extends Component
 
     public ?string $ends_on = null;
 
+    public bool $viewing = false;
+
+    public ?int $viewingId = null;
+
     public function mount(): void
     {
         abort_unless(Auth::user()?->hasAllBranchAccess(), 403);
+    }
+
+    public function view(int $id): void
+    {
+        $this->viewingId = $id;
+        $this->viewing = true;
+    }
+
+    public function updatedViewing(bool $value): void
+    {
+        if (! $value) {
+            $this->viewingId = null;
+        }
     }
 
     public function save(): void
@@ -53,6 +70,7 @@ class SessionManager extends Component
     {
         return view('livewire.sessions.session-manager', [
             'sessions' => AcademicSession::orderByDesc('is_active')->orderBy('name')->get(),
+            'record' => $this->viewingId ? AcademicSession::find($this->viewingId) : null,
         ]);
     }
 }

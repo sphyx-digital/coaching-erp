@@ -17,7 +17,7 @@
             @foreach ($rows as $r)
                 @php($s = $r['staff'])
                 @php($ps = $r['payslip'])
-                <tr wire:key="pr-{{ $s->id }}">
+                <tr wire:key="pr-{{ $s->id }}" class="is-clickable" wire:click="editStructure({{ $s->id }})" tabindex="0" wire:keydown.enter="editStructure({{ $s->id }})">
                     <td><b>{{ $s->name }}</b>@if($s->designation)<div class="field__hint">{{ $s->designation }}</div>@endif</td>
                     <td class="num">
                         @if ($r['structure']){{ paise_to_rupees($r['structure']->monthly_gross) }}@else<span class="field__hint">Not set</span>@endif
@@ -32,16 +32,17 @@
                         @endif
                     </td>
                     <td style="text-align:right;white-space:nowrap;">
-                        <button class="btn btn--sm" wire:click="editStructure({{ $s->id }})">Salary</button>
                         @if ($r['structure'])
                             @if (! $ps || $ps->status === 'draft')
-                                <button class="btn btn--sm btn--primary" wire:click="generate({{ $s->id }})">{{ $ps ? 'Regenerate' : 'Generate' }}</button>
+                                <button class="btn btn--sm btn--primary" wire:click.stop="generate({{ $s->id }})">{{ $ps ? 'Regenerate' : 'Generate' }}</button>
                             @endif
                             @if ($ps)
-                                <a class="btn btn--sm" href="{{ route('payslips.show', $ps->id) }}" target="_blank" rel="noopener">Payslip</a>
-                                @if ($ps->status === 'draft')<button class="btn btn--sm" wire:click="finalize({{ $ps->id }})">Finalize</button>@endif
-                                @if ($ps->status === 'finalized')<button class="btn btn--sm" wire:click="markPaid({{ $ps->id }})">Mark paid</button>@endif
+                                <a class="btn btn--sm" href="{{ route('payslips.show', $ps->id) }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Payslip</a>
+                                @if ($ps->status === 'draft')<button class="btn btn--sm" wire:click.stop="finalize({{ $ps->id }})">Finalize</button>@endif
+                                @if ($ps->status === 'finalized')<button class="btn btn--sm" wire:click.stop="markPaid({{ $ps->id }})">Mark paid</button>@endif
                             @endif
+                        @else
+                            <span class="field__hint">Set salary &rsaquo;</span>
                         @endif
                     </td>
                 </tr>
