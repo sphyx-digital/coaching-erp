@@ -22,14 +22,14 @@
         @else
             <x-data-table :head="['Name', 'Batch', 'Type', 'Status', '']">
                 @foreach ($assessments as $a)
-                    <tr wire:key="a-{{ $a->id }}">
+                    <tr wire:key="a-{{ $a->id }}" class="is-clickable" wire:click="select({{ $a->id }})" tabindex="0" wire:keydown.enter="select({{ $a->id }})">
                         <td>{{ $a->name }}</td>
                         <td>{{ $a->batch?->name }}</td>
                         <td>{{ ucfirst($a->type) }}</td>
                         <td>
                             @if ($a->status === 'published')<x-pill variant="success">Published</x-pill>@else<x-pill variant="info">Draft</x-pill>@endif
                         </td>
-                        <td><x-btn size="sm" variant="secondary" wire:click="select({{ $a->id }})">Open</x-btn></td>
+                        <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
                     </tr>
                 @endforeach
             </x-data-table>
