@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Staff;
 
+use App\Livewire\Concerns\WithBulkSelect;
 use App\Models\Branch;
 use App\Models\Staff;
 use App\Models\User;
@@ -16,6 +17,8 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class StaffManager extends Component
 {
+    use WithBulkSelect;
+
     /** Roles a staff member may hold (not portal or platform roles). */
     public const STAFF_ROLES = ['Institute Admin', 'Branch Admin', 'Counsellor', 'Teacher', 'Accountant'];
 
@@ -106,10 +109,22 @@ class StaffManager extends Component
         $staff->update(['is_active' => ! $staff->is_active]);
     }
 
+    public function bulkSetActive(bool $active): void
+    {
+        abort_unless(Auth::user()?->can('settings.update'), 403);
+        Staff::whereIn('id', $this->selectedIds())->update(['is_active' => $active]);
+        $count = $this->selectedCount();
+        $this->clearSelection();
+        session()->flash('ok', ($active ? 'Activated ' : 'Deactivated ').$count.' staff.');
+    }
+
     public function render()
     {
+        $staff = Staff::with('user')->orderBy('name')->get();
+        $this->pageIds = $staff->pluck('id')->all();
+
         return view('livewire.staff.staff-manager', [
-            'staff' => Staff::with('user')->orderBy('name')->get(),
+            'staff' => $staff,
             'branches' => Branch::orderBy('name')->pluck('name', 'id'),
             'roles' => self::STAFF_ROLES,
             'record' => $this->viewingId ? Staff::with(['user', 'primaryBranch'])->find($this->viewingId) : null,

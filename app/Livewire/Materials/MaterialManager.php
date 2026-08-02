@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Materials;
 
+use App\Livewire\Concerns\WithBulkSelect;
 use App\Models\Batch;
 use App\Models\Course;
 use App\Models\StudyMaterial;
@@ -13,6 +14,8 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class MaterialManager extends Component
 {
+    use WithBulkSelect;
+
     public const TYPES = ['document' => 'Document', 'video' => 'Video', 'note' => 'Note', 'link' => 'Link'];
 
     public string $courseFilter = '';
@@ -112,11 +115,36 @@ class MaterialManager extends Component
         StudyMaterial::findOrFail($id)->delete();
     }
 
+    public function bulkPublish(bool $published): void
+    {
+        abort_unless($this->canManage(), 403);
+        StudyMaterial::whereIn('id', $this->selectedIds())->update([
+            'is_published' => $published,
+            'published_at' => $published ? now() : null,
+        ]);
+        $this->afterBulk($published ? 'published' : 'unpublished');
+    }
+
+    public function bulkDelete(): void
+    {
+        abort_unless($this->canManage(), 403);
+        StudyMaterial::whereIn('id', $this->selectedIds())->delete();
+        $this->afterBulk('deleted');
+    }
+
+    private function afterBulk(string $verb): void
+    {
+        $count = $this->selectedCount();
+        $this->clearSelection();
+        session()->flash('material_saved', ucfirst($verb)." {$count} materials.");
+    }
+
     public function render()
     {
         $materials = StudyMaterial::with(['course', 'batch', 'subject'])
             ->when($this->courseFilter !== '', fn ($q) => $q->where('course_id', $this->courseFilter))
             ->latest()->get();
+        $this->pageIds = $materials->pluck('id')->all();
 
         return view('livewire.materials.material-manager', [
             'materials' => $materials,

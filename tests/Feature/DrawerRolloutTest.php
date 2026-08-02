@@ -19,6 +19,7 @@ use App\Models\Course;
 use App\Models\Institute;
 use App\Models\MessageLog;
 use App\Models\Staff;
+use App\Models\StudyMaterial;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -113,6 +114,32 @@ class DrawerRolloutTest extends TestCase
         Livewire::actingAs($this->admin)->test(OverrideLog::class)->assertOk();
         Livewire::actingAs($this->admin)->test(FailedMessages::class)->assertOk();
         Livewire::actingAs($this->admin)->test(ApprovalInbox::class)->assertOk();
+    }
+
+    public function test_staff_bulk_activate_deactivate(): void
+    {
+        $a = Staff::create(['user_id' => User::factory()->create()->id, 'institute_id' => $this->institute->id, 'name' => 'A', 'is_active' => true]);
+        $b = Staff::create(['user_id' => User::factory()->create()->id, 'institute_id' => $this->institute->id, 'name' => 'B', 'is_active' => true]);
+
+        Livewire::actingAs($this->admin)->test(StaffManager::class)
+            ->set('selected', [(string) $a->id, (string) $b->id])
+            ->call('bulkSetActive', false);
+
+        $this->assertFalse($a->fresh()->is_active);
+        $this->assertFalse($b->fresh()->is_active);
+    }
+
+    public function test_material_bulk_publish(): void
+    {
+        $m1 = StudyMaterial::create(['institute_id' => $this->institute->id, 'title' => 'M1', 'type' => 'note', 'url' => 'https://e.com/1', 'is_published' => false]);
+        $m2 = StudyMaterial::create(['institute_id' => $this->institute->id, 'title' => 'M2', 'type' => 'note', 'url' => 'https://e.com/2', 'is_published' => false]);
+
+        Livewire::actingAs($this->admin)->test(MaterialManager::class)
+            ->set('selected', [(string) $m1->id, (string) $m2->id])
+            ->call('bulkPublish', true);
+
+        $this->assertTrue($m1->fresh()->is_published);
+        $this->assertTrue($m2->fresh()->is_published);
     }
 
     public function test_message_log_row_opens_drawer(): void

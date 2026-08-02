@@ -5,7 +5,7 @@
         </x-slot:actions>
     </x-page-header>
 
-    @if (session('material_saved'))<div class="alert alert--success" role="status">Material saved.</div>@endif
+    @if (session('material_saved'))<div class="alert alert--success" role="status">{{ is_string(session('material_saved')) ? session('material_saved') : 'Material saved.' }}</div>@endif
 
     <x-card>
         <div class="toolbar" style="margin-bottom:var(--space-3);">
@@ -21,21 +21,44 @@
         @if ($materials->isEmpty())
             <x-state title="No materials yet">Share notes, videos and documents with students — they appear in the student portal.</x-state>
         @else
-            <x-data-table :head="['Title', 'Type', 'Course / Batch', 'Status', '']">
+            @if ($this->selectedCount())
+                <div class="bulkbar">
+                    <span class="bulkbar__count">{{ $this->selectedCount() }} selected</span>
+                    <x-btn size="sm" variant="secondary" wire:click="bulkPublish(true)">Publish</x-btn>
+                    <x-btn size="sm" variant="secondary" wire:click="bulkPublish(false)">Unpublish</x-btn>
+                    <x-btn size="sm" variant="secondary" wire:click="bulkDelete" wire:confirm="Delete the selected materials?">Delete</x-btn>
+                    <span class="bulkbar__spacer"></span>
+                    <x-btn size="sm" variant="secondary" wire:click="clearSelection">Clear</x-btn>
+                </div>
+            @endif
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-check"><input type="checkbox" aria-label="Select all"
+                            @change="$event.target.checked ? $wire.selectAllVisible() : $wire.clearSelection()"
+                            @checked($this->selectedCount() && $this->selectedCount() === count($materials))></th>
+                        <th>Title</th><th>Type</th><th>Course / Batch</th><th>Status</th><th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
                 @foreach ($materials as $m)
-                    <tr wire:key="m-{{ $m->id }}" class="is-clickable" wire:click="openEdit({{ $m->id }})" tabindex="0" wire:keydown.enter="openEdit({{ $m->id }})">
+                    <tr wire:key="m-{{ $m->id }}">
+                        <td class="col-check"><input type="checkbox" value="{{ $m->id }}" wire:model.live="selected" aria-label="Select {{ $m->title }}"></td>
                         <td><b>{{ $m->title }}</b>@if($m->description)<div class="field__hint">{{ \Illuminate\Support\Str::limit($m->description, 70) }}</div>@endif</td>
                         <td><x-pill variant="info">{{ $m->typeLabel() }}</x-pill></td>
                         <td>{{ $m->course?->name ?? 'All' }}@if($m->batch) · {{ $m->batch->name }}@endif</td>
                         <td>@if($m->is_published)<x-pill variant="success">Published</x-pill>@else<x-pill variant="muted">Draft</x-pill>@endif</td>
-                        <td style="text-align:right;white-space:nowrap;">
-                            <a class="btn btn--sm" href="{{ $m->url }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open</a>
-                            <button class="btn btn--sm" wire:click.stop="togglePublish({{ $m->id }})">{{ $m->is_published ? 'Unpublish' : 'Publish' }}</button>
-                            <button class="btn btn--sm" wire:click.stop="delete({{ $m->id }})" wire:confirm="Delete this material?">Delete</button>
+                        <td>
+                            <div class="row-actions">
+                                <x-btn size="sm" variant="secondary" wire:click="openEdit({{ $m->id }})">View / Edit</x-btn>
+                                <a class="btn btn--sm btn--secondary" href="{{ $m->url }}" target="_blank" rel="noopener">Open</a>
+                                <x-btn size="sm" variant="secondary" wire:click="togglePublish({{ $m->id }})">{{ $m->is_published ? 'Unpublish' : 'Publish' }}</x-btn>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
-            </x-data-table>
+                </tbody>
+            </table>
         @endif
     </x-card>
 

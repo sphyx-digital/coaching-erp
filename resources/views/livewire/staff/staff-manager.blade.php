@@ -1,6 +1,8 @@
 <div class="container-narrow">
     <x-page-header title="Staff" />
 
+    @if (session('ok'))<div class="alert alert--success" role="status">{{ session('ok') }}</div>@endif
+
     <div class="stack" style="gap: var(--space-5);">
         <x-card title="Add a staff member">
             <form wire:submit="save">
@@ -18,9 +20,28 @@
             @if ($staff->isEmpty())
                 <x-state title="No staff yet">Add your first staff member above.</x-state>
             @else
-                <x-data-table :head="['Name', 'Email', 'Role', 'Status', '']">
+                @if ($this->selectedCount())
+                    <div class="bulkbar">
+                        <span class="bulkbar__count">{{ $this->selectedCount() }} selected</span>
+                        <x-btn size="sm" variant="secondary" wire:click="bulkSetActive(true)">Activate</x-btn>
+                        <x-btn size="sm" variant="secondary" wire:click="bulkSetActive(false)">Deactivate</x-btn>
+                        <span class="bulkbar__spacer"></span>
+                        <x-btn size="sm" variant="secondary" wire:click="clearSelection">Clear</x-btn>
+                    </div>
+                @endif
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-check"><input type="checkbox" aria-label="Select all"
+                                @change="$event.target.checked ? $wire.selectAllVisible() : $wire.clearSelection()"
+                                @checked($this->selectedCount() && $this->selectedCount() === count($staff))></th>
+                            <th>Name</th><th>Email</th><th>Role</th><th>Status</th><th style="text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     @foreach ($staff as $member)
-                        <tr wire:key="staff-{{ $member->id }}" class="is-clickable" wire:click="view({{ $member->id }})" tabindex="0" wire:keydown.enter="view({{ $member->id }})">
+                        <tr wire:key="staff-{{ $member->id }}">
+                            <td class="col-check"><input type="checkbox" value="{{ $member->id }}" wire:model.live="selected" aria-label="Select {{ $member->name }}"></td>
                             <td>{{ $member->name }}</td>
                             <td>{{ $member->email }}</td>
                             <td>
@@ -35,10 +56,16 @@
                                     <x-pill variant="warning">Inactive</x-pill>
                                 @endif
                             </td>
-                            <td class="row-chevron" style="text-align:right;">&rsaquo;</td>
+                            <td>
+                                <div class="row-actions">
+                                    <x-btn size="sm" variant="secondary" wire:click="view({{ $member->id }})">View</x-btn>
+                                    <x-btn size="sm" variant="secondary" wire:click="toggleActive({{ $member->id }})">{{ $member->is_active ? 'Deactivate' : 'Activate' }}</x-btn>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
-                </x-data-table>
+                    </tbody>
+                </table>
             @endif
         </x-card>
     </div>
