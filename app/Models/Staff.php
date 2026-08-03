@@ -16,7 +16,28 @@ class Staff extends Model
 
     protected $guarded = ['id'];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected $casts = [
+        'is_active' => 'boolean',
+        'dob' => 'date',
+        'joining_date' => 'date',
+        'exit_date' => 'date',
+    ];
+
+    protected static function booted(): void
+    {
+        // Keep the display name in step with the structured name parts.
+        static::saving(function (Staff $staff) {
+            if ($staff->first_name) {
+                $staff->name = trim(collect([$staff->first_name, $staff->middle_name, $staff->last_name])->filter()->implode(' '));
+            }
+        });
+    }
+
+    /** Age today, if DOB is set. */
+    public function age(): ?int
+    {
+        return $this->dob?->age;
+    }
 
     public function user(): BelongsTo
     {
