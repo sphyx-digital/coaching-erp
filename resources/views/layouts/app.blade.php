@@ -38,6 +38,8 @@
             </div>
         </header>
 
+        @include('partials.page-tabs')
+
         <main class="app-content" id="main">
             @hasSection('content')
                 @yield('content')
