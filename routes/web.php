@@ -15,6 +15,7 @@ use App\Livewire\Assessments\AssessmentManager;
 use App\Livewire\Attendance\AttendanceRegister;
 use App\Livewire\Batches\BatchManager;
 use App\Livewire\Branches\BranchManager;
+use App\Livewire\Copilot\Copilot;
 use App\Livewire\Courses\CourseSubjectManager;
 use App\Livewire\Dashboard;
 use App\Livewire\Enquiries\EnquiryManager;
@@ -84,6 +85,7 @@ Route::middleware('auth')->prefix('portal')->group(function () {
 // Authenticated back office (modules light up phase by phase).
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/copilot', Copilot::class)->name('copilot');
     Route::get('/approvals', ApprovalInbox::class)->name('approvals');
 
     Route::get('/enquiries', EnquiryManager::class)->name('enquiries');

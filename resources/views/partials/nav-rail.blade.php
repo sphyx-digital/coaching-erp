@@ -15,6 +15,10 @@
     <a class="nav-rail__link" href="{{ url('/dashboard') }}" {!! $link('dashboard') !!} title="Dashboard"><x-icon name="dashboard" /><span class="nav-rail__label">Dashboard</span></a>
 
     @if ($u && ! $u->isPortalUser())
+        <a class="nav-rail__link" href="{{ url('/copilot') }}" {!! $link('copilot') !!} title="AI Copilot"><x-icon name="enquiry" /><span class="nav-rail__label">AI Copilot</span></a>
+    @endif
+
+    @if ($u && ! $u->isPortalUser())
         <a class="nav-rail__link" href="{{ url('/approvals') }}" {!! $link('approvals') !!} title="Approvals"><x-icon name="attendance" /><span class="nav-rail__label">Approvals</span></a>
         <a class="nav-rail__link" href="{{ url('/security') }}" {!! $link('security') !!} title="Security (2FA)"><x-icon name="settings" /><span class="nav-rail__label">Security</span></a>
     @endif
