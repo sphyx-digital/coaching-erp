@@ -37,6 +37,9 @@ class BranchManager extends Component
     public function mount(): void
     {
         abort_unless(Auth::user()?->hasAllBranchAccess(), 403);
+        if (($id = (int) request()->integer('edit')) && Branch::whereKey($id)->exists()) {
+            $this->openEdit($id);
+        }
     }
 
     private function blank(): array

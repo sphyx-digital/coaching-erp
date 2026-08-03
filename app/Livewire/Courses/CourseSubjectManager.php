@@ -31,6 +31,9 @@ class CourseSubjectManager extends Component
     {
         // Course and subject management is gated to Institute Admin.
         abort_unless(Auth::user()?->hasAllBranchAccess(), 403);
+        if (($id = (int) request()->integer('view')) && Course::whereKey($id)->exists()) {
+            $this->view($id);
+        }
     }
 
     public function view(int $id): void

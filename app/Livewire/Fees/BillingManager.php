@@ -47,6 +47,9 @@ class BillingManager extends Component
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('fee.view'), 403);
+        if (($sid = (int) request()->integer('student')) && Student::whereKey($sid)->exists()) {
+            $this->studentId = $sid;
+        }
     }
 
     public function raiseInvoice(FeeService $fees): void

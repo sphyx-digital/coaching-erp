@@ -37,6 +37,9 @@ class StaffManager extends Component
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('settings.update'), 403);
+        if (($id = (int) request()->integer('view')) && Staff::whereKey($id)->exists()) {
+            $this->view($id);
+        }
     }
 
     public function view(int $id): void

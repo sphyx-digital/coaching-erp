@@ -28,6 +28,12 @@
             </button>
             <div class="topbar__title">@yield('title', 'Dashboard')</div>
             <div class="topbar__right">
+                <button type="button" class="topbar__search" aria-label="Search"
+                        @click="$dispatch('cmdk-open')">
+                    <x-icon name="enquiry" width="16" height="16" />
+                    <span class="topbar__search-label">Search…</span>
+                    <kbd class="cmd__kbd">⌘K</kbd>
+                </button>
                 @yield('topbar')
             </div>
         </header>
@@ -40,6 +46,12 @@
             @endif
         </main>
     </div>
+
+    @auth
+        @unless (auth()->user()->isPortalUser())
+            <livewire:search.command-palette />
+        @endunless
+    @endauth
 </div>
 </body>
 </html>
