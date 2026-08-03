@@ -10,7 +10,7 @@
         @else
             <x-data-table :head="['Request', 'Requested by', ['label' => 'Amount', 'num' => true], 'Raised', '']">
                 @foreach ($pending as $a)
-                    <tr wire:key="appr-{{ $a->id }}">
+                    <tr wire:key="appr-{{ $a->id }}" class="is-clickable" wire:click="view({{ $a->id }})" tabindex="0" wire:keydown.enter="view({{ $a->id }})">
                         <td>
                             {{ $a->title }}
                             @if ($a->escalated_at)<x-pill variant="warning">Escalated</x-pill>@endif
@@ -20,8 +20,7 @@
                         <td>{{ $a->requested_at?->diffForHumans() }}</td>
                         <td>
                             <div class="row-actions">
-                                <x-btn size="sm" variant="secondary" wire:click="view({{ $a->id }})">Review</x-btn>
-                                <x-btn size="sm" variant="primary" wire:click="approve({{ $a->id }})">Approve</x-btn>
+                                <x-btn size="sm" variant="primary" wire:click.stop="approve({{ $a->id }})">Approve</x-btn>
                             </div>
                         </td>
                     </tr>

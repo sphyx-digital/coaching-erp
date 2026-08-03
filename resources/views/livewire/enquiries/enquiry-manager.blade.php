@@ -93,8 +93,8 @@
                     </thead>
                     <tbody>
                     @forelse ($enquiries as $e)
-                        <tr wire:key="enq-{{ $e->id }}">
-                            <td class="col-check"><input type="checkbox" value="{{ $e->id }}" wire:model.live="selected" aria-label="Select {{ $e->name }}"></td>
+                        <tr wire:key="enq-{{ $e->id }}" class="is-clickable" wire:click="view({{ $e->id }})" tabindex="0" wire:keydown.enter="view({{ $e->id }})">
+                            <td class="col-check" @click.stop><input type="checkbox" value="{{ $e->id }}" wire:model.live="selected" @click.stop aria-label="Select {{ $e->name }}"></td>
                             <td>{{ $e->enquiry_number }}</td>
                             <td>{{ $e->name }}<br><span class="field__hint">{{ $e->phone ?: '—' }}</span></td>
                             <td>{{ $e->course?->name ?: '—' }}</td>
@@ -103,9 +103,10 @@
                             <td><x-pill :variant="$e->status->pillVariant()">{{ $e->status->label() }}</x-pill></td>
                             <td>
                                 <div class="row-actions">
-                                    <x-btn size="sm" variant="secondary" wire:click="view({{ $e->id }})">View</x-btn>
                                     @if (! $e->status->isTerminal() && $e->status !== \App\Enums\EnquiryStatus::Lost)
-                                        <x-btn size="sm" variant="primary" wire:click="convert({{ $e->id }})">Convert</x-btn>
+                                        <x-btn size="sm" variant="primary" wire:click.stop="convert({{ $e->id }})">Convert</x-btn>
+                                    @else
+                                        <span class="field__hint">—</span>
                                     @endif
                                 </div>
                             </td>

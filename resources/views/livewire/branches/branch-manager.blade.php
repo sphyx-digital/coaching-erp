@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                 @forelse ($branches as $b)
-                    <tr wire:key="branch-{{ $b->id }}">
+                    <tr wire:key="branch-{{ $b->id }}" class="is-clickable" wire:click="openEdit({{ $b->id }})" tabindex="0" wire:keydown.enter="openEdit({{ $b->id }})">
                         <td><strong>{{ $b->name }}</strong>@if ($b->tagline)<br><span class="field__hint">{{ $b->tagline }}</span>@endif</td>
                         <td>{{ $b->code }}</td>
                         <td>{{ $b->shortAddress() ?: '—' }}</td>
@@ -40,8 +40,7 @@
                         <td>@if ($b->is_active)<x-pill variant="success">Active</x-pill>@else<x-pill variant="warning">Inactive</x-pill>@endif</td>
                         <td>
                             <div class="row-actions">
-                                <button type="button" class="btn btn--sm btn--secondary" wire:click="openEdit({{ $b->id }})">View / Edit</button>
-                                <button type="button" class="btn btn--sm btn--secondary" wire:click="toggleActive({{ $b->id }})">{{ $b->is_active ? 'Deactivate' : 'Activate' }}</button>
+                                <button type="button" class="btn btn--sm btn--secondary" wire:click.stop="toggleActive({{ $b->id }})">{{ $b->is_active ? 'Deactivate' : 'Activate' }}</button>
                             </div>
                         </td>
                     </tr>

@@ -40,8 +40,8 @@
                     </thead>
                     <tbody>
                     @foreach ($staff as $member)
-                        <tr wire:key="staff-{{ $member->id }}">
-                            <td class="col-check"><input type="checkbox" value="{{ $member->id }}" wire:model.live="selected" aria-label="Select {{ $member->name }}"></td>
+                        <tr wire:key="staff-{{ $member->id }}" class="is-clickable" wire:click="view({{ $member->id }})" tabindex="0" wire:keydown.enter="view({{ $member->id }})">
+                            <td class="col-check" @click.stop><input type="checkbox" value="{{ $member->id }}" wire:model.live="selected" @click.stop aria-label="Select {{ $member->name }}"></td>
                             <td>{{ $member->name }}</td>
                             <td>{{ $member->email }}</td>
                             <td>
@@ -58,8 +58,7 @@
                             </td>
                             <td>
                                 <div class="row-actions">
-                                    <x-btn size="sm" variant="secondary" wire:click="view({{ $member->id }})">View</x-btn>
-                                    <x-btn size="sm" variant="secondary" wire:click="toggleActive({{ $member->id }})">{{ $member->is_active ? 'Deactivate' : 'Activate' }}</x-btn>
+                                    <x-btn size="sm" variant="secondary" wire:click.stop="toggleActive({{ $member->id }})">{{ $member->is_active ? 'Deactivate' : 'Activate' }}</x-btn>
                                 </div>
                             </td>
                         </tr>

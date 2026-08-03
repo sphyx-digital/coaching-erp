@@ -19,7 +19,7 @@
             @else
                 <x-data-table :head="['Name', 'Starts', 'Ends', 'Status', '']">
                     @foreach ($sessions as $session)
-                        <tr wire:key="session-{{ $session->id }}">
+                        <tr wire:key="session-{{ $session->id }}" class="is-clickable" wire:click="view({{ $session->id }})" tabindex="0" wire:keydown.enter="view({{ $session->id }})">
                             <td>{{ $session->name }}</td>
                             <td>{{ $session->starts_on?->format('d-m-Y') ?: '—' }}</td>
                             <td>{{ $session->ends_on?->format('d-m-Y') ?: '—' }}</td>
@@ -32,8 +32,7 @@
                             </td>
                             <td>
                                 <div class="row-actions">
-                                    <x-btn size="sm" variant="secondary" wire:click="view({{ $session->id }})">View</x-btn>
-                                    @unless ($session->is_active)<x-btn size="sm" variant="secondary" wire:click="markActive({{ $session->id }})">Set active</x-btn>@endunless
+                                    @unless ($session->is_active)<x-btn size="sm" variant="secondary" wire:click.stop="markActive({{ $session->id }})">Set active</x-btn>@else<span class="field__hint">—</span>@endunless
                                 </div>
                             </td>
                         </tr>

@@ -14,7 +14,7 @@
         @else
             <x-data-table :head="['Exam', 'Course', 'Questions', 'Marks', 'Attempts', 'Status', '']">
                 @foreach ($exams as $e)
-                    <tr wire:key="ex-{{ $e->id }}">
+                    <tr wire:key="ex-{{ $e->id }}" class="is-clickable" wire:click="openResults({{ $e->id }})" tabindex="0" wire:keydown.enter="openResults({{ $e->id }})">
                         <td><b>{{ $e->title }}</b><div class="field__hint">{{ $e->duration_minutes }} min · pass {{ $e->pass_percentage }}%{{ $e->negative_marking ? ' · negative' : '' }}</div></td>
                         <td>{{ $e->course?->name ?? 'All' }}</td>
                         <td class="num">{{ $e->questions_count }}</td>
@@ -26,11 +26,10 @@
                         </td>
                         <td>
                             <div class="row-actions">
-                                <button class="btn btn--sm btn--secondary" wire:click="openResults({{ $e->id }})">Results</button>
-                                <button class="btn btn--sm btn--secondary" wire:click="openBuilder({{ $e->id }})">Questions</button>
-                                @if ($e->status !== 'published')<button class="btn btn--sm btn--secondary" wire:click="openEdit({{ $e->id }})">Edit</button>@endif
-                                @if ($e->status === 'draft')<button class="btn btn--sm btn--primary" wire:click="publish({{ $e->id }})">Publish</button>@endif
-                                @if ($e->status === 'published')<button class="btn btn--sm btn--secondary" wire:click="close({{ $e->id }})">Close</button>@endif
+                                <button class="btn btn--sm btn--secondary" wire:click.stop="openBuilder({{ $e->id }})">Questions</button>
+                                @if ($e->status !== 'published')<button class="btn btn--sm btn--secondary" wire:click.stop="openEdit({{ $e->id }})">Edit</button>@endif
+                                @if ($e->status === 'draft')<button class="btn btn--sm btn--primary" wire:click.stop="publish({{ $e->id }})">Publish</button>@endif
+                                @if ($e->status === 'published')<button class="btn btn--sm btn--secondary" wire:click.stop="close({{ $e->id }})">Close</button>@endif
                             </div>
                         </td>
                     </tr>

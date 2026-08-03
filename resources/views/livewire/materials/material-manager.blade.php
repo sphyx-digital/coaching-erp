@@ -42,17 +42,16 @@
                 </thead>
                 <tbody>
                 @foreach ($materials as $m)
-                    <tr wire:key="m-{{ $m->id }}">
-                        <td class="col-check"><input type="checkbox" value="{{ $m->id }}" wire:model.live="selected" aria-label="Select {{ $m->title }}"></td>
+                    <tr wire:key="m-{{ $m->id }}" class="is-clickable" wire:click="openEdit({{ $m->id }})" tabindex="0" wire:keydown.enter="openEdit({{ $m->id }})">
+                        <td class="col-check" @click.stop><input type="checkbox" value="{{ $m->id }}" wire:model.live="selected" @click.stop aria-label="Select {{ $m->title }}"></td>
                         <td><b>{{ $m->title }}</b>@if($m->description)<div class="field__hint">{{ \Illuminate\Support\Str::limit($m->description, 70) }}</div>@endif</td>
                         <td><x-pill variant="info">{{ $m->typeLabel() }}</x-pill></td>
                         <td>{{ $m->course?->name ?? 'All' }}@if($m->batch) · {{ $m->batch->name }}@endif</td>
                         <td>@if($m->is_published)<x-pill variant="success">Published</x-pill>@else<x-pill variant="muted">Draft</x-pill>@endif</td>
                         <td>
                             <div class="row-actions">
-                                <x-btn size="sm" variant="secondary" wire:click="openEdit({{ $m->id }})">View / Edit</x-btn>
-                                <a class="btn btn--sm btn--secondary" href="{{ $m->url }}" target="_blank" rel="noopener">Open</a>
-                                <x-btn size="sm" variant="secondary" wire:click="togglePublish({{ $m->id }})">{{ $m->is_published ? 'Unpublish' : 'Publish' }}</x-btn>
+                                <a class="btn btn--sm btn--secondary" href="{{ $m->url }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open</a>
+                                <x-btn size="sm" variant="secondary" wire:click.stop="togglePublish({{ $m->id }})">{{ $m->is_published ? 'Unpublish' : 'Publish' }}</x-btn>
                             </div>
                         </td>
                     </tr>
