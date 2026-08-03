@@ -41,6 +41,7 @@ use App\Livewire\Reports\Reports;
 use App\Livewire\Security\TwoFactorSettings;
 use App\Livewire\Sessions\SessionManager;
 use App\Livewire\Settings\SettingsManager;
+use App\Livewire\Setup\SetupGuide;
 use App\Livewire\Staff\StaffManager;
 use App\Livewire\Timetable\TimetableManager;
 use App\Livewire\Website\WebsiteManager;
@@ -85,6 +86,7 @@ Route::middleware('auth')->prefix('portal')->group(function () {
 // Authenticated back office (modules light up phase by phase).
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/get-started', SetupGuide::class)->name('setup');
     Route::get('/copilot', Copilot::class)->name('copilot');
     Route::get('/approvals', ApprovalInbox::class)->name('approvals');
 

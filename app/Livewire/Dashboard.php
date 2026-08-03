@@ -9,6 +9,7 @@ use App\Models\Enrollment;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Services\Reports\ReportService;
+use App\Services\Setup\SetupChecklist;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
@@ -121,11 +122,13 @@ class Dashboard extends Component
         ];
     }
 
-    public function render(ReportService $reports)
+    public function render(ReportService $reports, SetupChecklist $setup)
     {
         $u = Auth::user();
         [$from, $to] = $this->bounds();
         $today = now()->toDateString();
+
+        $setupProgress = $setup->shouldNudge($u) ? $setup->progress($u) : null;
 
         // Previous period of equal length, for deltas.
         $span = Carbon::parse($from)->diffInDays(Carbon::parse($to)) + 1;
@@ -215,6 +218,7 @@ class Dashboard extends Component
 
         return view('livewire.dashboard', [
             'user' => $u,
+            'setupProgress' => $setupProgress,
             'range' => $this->range,
             'rangeLabel' => Carbon::parse($from)->format('d M Y').' – '.Carbon::parse($to)->format('d M Y'),
             'kpis' => [

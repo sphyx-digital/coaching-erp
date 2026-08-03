@@ -196,6 +196,33 @@ a { color: var(--action); text-underline-offset: 2px; }
 .timeline li::before { content: ''; position: absolute; left: -5px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--action); }
 .timeline .t-when { font-size: var(--text-xs); color: var(--text-subtle); }
 
+/* ---- Setup / onboarding guide ---- */
+.setup-progress { height: 8px; background: var(--surface-sunken); border-radius: var(--radius-pill); overflow: hidden; margin-top: var(--space-3); }
+.setup-progress span { display: block; height: 100%; background: var(--action); border-radius: var(--radius-pill); transition: width var(--motion-base) var(--ease-out); }
+.setup-step { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.setup-step.is-done { background: color-mix(in srgb, var(--success) 5%, var(--surface)); border-color: color-mix(in srgb, var(--success) 22%, var(--border)); }
+.setup-step__mark { width: 30px; height: 30px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: var(--text-sm); background: var(--surface-sunken); color: var(--text-muted); }
+.setup-step.is-done .setup-step__mark { background: var(--success); color: #fff; }
+.setup-step__body { flex: 1; min-width: 0; }
+.setup-step__title { font-weight: var(--weight-semibold); display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.setup-step__opt { font-size: var(--text-xs); color: var(--text-subtle); font-weight: 400; }
+.setup-step__desc { margin: 2px 0 0; font-size: var(--text-sm); color: var(--text-muted); }
+.setup-step__action { flex: none; }
+
+.flow-map { display: flex; align-items: stretch; gap: var(--space-2); overflow-x: auto; padding-bottom: var(--space-2); }
+.flow-node { flex: 1 0 130px; min-width: 130px; display: flex; flex-direction: column; gap: 4px; padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); text-decoration: none; color: var(--text); transition: border-color var(--motion-fast), box-shadow var(--motion-fast); }
+.flow-node:hover { border-color: var(--action); box-shadow: var(--elev-1); }
+.flow-node__icon { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: color-mix(in srgb, var(--brand-hue) 12%, var(--surface)); color: var(--action); }
+.flow-node__label { font-weight: var(--weight-semibold); font-size: var(--text-sm); }
+.flow-node__desc { font-size: var(--text-xs); color: var(--text-muted); }
+.flow-arrow { align-self: center; color: var(--text-subtle); font-size: 22px; flex: none; }
+
+/* Dashboard setup nudge */
+.setup-nudge { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) var(--space-4); background: linear-gradient(135deg, color-mix(in srgb, var(--brand-hue) 14%, var(--surface)), var(--surface)); border: 1px solid color-mix(in srgb, var(--brand-hue) 26%, transparent); border-radius: var(--radius-lg); }
+.setup-nudge__body { flex: 1; min-width: 0; }
+.setup-nudge__bar { height: 6px; background: var(--surface-sunken); border-radius: var(--radius-pill); overflow: hidden; margin-top: 6px; max-width: 320px; }
+.setup-nudge__bar span { display: block; height: 100%; background: var(--action); }
+
 /* ---- AI copilot chat ---- */
 .copilot { display: flex; flex-direction: column; gap: var(--space-3); min-height: 320px; max-height: 56vh; overflow-y: auto; padding: var(--space-1); }
 .copilot-msg { max-width: 88%; }

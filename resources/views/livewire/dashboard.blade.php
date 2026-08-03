@@ -8,6 +8,18 @@
         </div>
     </div>
 
+    {{-- First-run setup nudge --}}
+    @if ($setupProgress)
+        <div class="setup-nudge">
+            <div class="setup-nudge__body">
+                <strong>Finish setting up your institute</strong>
+                <span class="field__hint"> — {{ $setupProgress['done'] }} of {{ $setupProgress['total'] }} essential steps done.</span>
+                <div class="setup-nudge__bar"><span style="width: {{ $setupProgress['percent'] }}%"></span></div>
+            </div>
+            <a class="btn btn--primary" href="{{ url('/get-started') }}">Continue setup</a>
+        </div>
+    @endif
+
     {{-- Date-range toggle --}}
     <div style="display:flex; align-items:center; gap: var(--space-3); flex-wrap:wrap;">
         <div class="range-toggle" role="group" aria-label="Date range">

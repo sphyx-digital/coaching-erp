@@ -14,6 +14,9 @@
 
     <a class="nav-rail__link" href="{{ url('/dashboard') }}" {!! $link('dashboard') !!} title="Dashboard"><x-icon name="dashboard" /><span class="nav-rail__label">Dashboard</span></a>
 
+    @if ($u && $u->hasAllBranchAccess())
+        <a class="nav-rail__link" href="{{ url('/get-started') }}" {!! $link('get-started') !!} title="Get started"><x-icon name="assessment" /><span class="nav-rail__label">Get started</span></a>
+    @endif
     @if ($u && ! $u->isPortalUser())
         <a class="nav-rail__link" href="{{ url('/copilot') }}" {!! $link('copilot') !!} title="AI Copilot"><x-icon name="enquiry" /><span class="nav-rail__label">AI Copilot</span></a>
     @endif
