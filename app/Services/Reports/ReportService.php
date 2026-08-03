@@ -34,9 +34,32 @@ class ReportService
     {
         $from = now()->subDays($days - 1)->toDateString();
 
-        return Payment::where('status', 'completed')->whereDate('payment_date', '>=', $from)
+        return $this->collectionsByDayRange($from, now()->toDateString());
+    }
+
+    /** Daily collection between two dates. @return array<string,int> date=>paise */
+    public function collectionsByDayRange(string $from, string $to): array
+    {
+        return Payment::where('status', 'completed')
+            ->whereBetween('payment_date', [$from, $to])
             ->selectRaw('payment_date, SUM(amount) total')->groupBy('payment_date')
             ->orderBy('payment_date')->pluck('total', 'payment_date')->map(fn ($v) => (int) $v)->all();
+    }
+
+    /** New enrollments per day in range. @return array<string,int> date=>count */
+    public function enrollmentsByDayRange(string $from, string $to): array
+    {
+        return Enrollment::whereBetween('created_at', [$from.' 00:00:00', $to.' 23:59:59'])
+            ->selectRaw('DATE(created_at) d, COUNT(*) c')->groupBy('d')->orderBy('d')
+            ->pluck('c', 'd')->map(fn ($v) => (int) $v)->all();
+    }
+
+    /** New enquiries per day in range. @return array<string,int> date=>count */
+    public function enquiriesByDayRange(string $from, string $to): array
+    {
+        return Enquiry::whereBetween('created_at', [$from.' 00:00:00', $to.' 23:59:59'])
+            ->selectRaw('DATE(created_at) d, COUNT(*) c')->groupBy('d')->orderBy('d')
+            ->pluck('c', 'd')->map(fn ($v) => (int) $v)->all();
     }
 
     /** Outstanding by ageing bucket. @return array<string,int> */

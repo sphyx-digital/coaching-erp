@@ -196,6 +196,29 @@ a { color: var(--action); text-underline-offset: 2px; }
 .timeline li::before { content: ''; position: absolute; left: -5px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--action); }
 .timeline .t-when { font-size: var(--text-xs); color: var(--text-subtle); }
 
+/* ---- Analytics: chart cards + range toggle ---- */
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-4); box-shadow: var(--elev-1); min-width: 0; }
+.chart-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); }
+.chart-card__title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-base); }
+.chart-card__body { position: relative; min-width: 0; }
+.chart-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-4); align-items: stretch; }
+.chart-grid > .span-6 { grid-column: span 6; }
+.chart-grid > .span-4 { grid-column: span 4; }
+.chart-grid > .span-8 { grid-column: span 8; }
+.chart-grid > .span-12 { grid-column: span 12; }
+@media (max-width: 900px) { .chart-grid > [class*="span-"] { grid-column: span 12; } }
+
+.range-toggle { display: inline-flex; flex-wrap: wrap; gap: 4px; background: var(--surface-sunken); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 3px; }
+.range-toggle button { border: 0; background: transparent; color: var(--text-muted); font-size: var(--text-xs); font-weight: var(--weight-medium); padding: 6px 12px; border-radius: var(--radius-pill); cursor: pointer; white-space: nowrap; }
+.range-toggle button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: var(--elev-1); }
+.range-toggle button:hover { color: var(--text); }
+
+.kpi-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-3); }
+.kpi--trend .kpi__value { display: flex; align-items: baseline; gap: 6px; }
+.kpi__delta { font-size: var(--text-xs); font-weight: var(--weight-semibold); }
+.kpi__delta--up { color: var(--success); }
+.kpi__delta--down { color: var(--danger); }
+
 /* Bulk-actions bar (appears when rows are selected) */
 .bulkbar { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; padding: var(--space-2) var(--space-3); margin-bottom: var(--space-3); background: color-mix(in srgb, var(--brand-hue) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--brand-hue) 24%, transparent); border-radius: var(--radius-md); }
 .bulkbar__count { font-weight: var(--weight-semibold); font-size: var(--text-sm); }

@@ -1,26 +1,83 @@
-<div class="stack">
+<div class="stack" style="gap: var(--space-4);">
     <div class="page-header">
         <h1 class="page-header__title">Dashboard</h1>
-        <div style="display:flex; gap: var(--space-2); align-items:center;">
+        <div style="display:flex; gap: var(--space-2); align-items:center; flex-wrap:wrap;">
             <span class="field__hint">{{ $user->name }}</span>
             @foreach ($user->getRoleNames() as $r)<x-pill variant="info">{{ $r }}</x-pill>@endforeach
             <form method="POST" action="{{ route('logout') }}">@csrf<x-btn size="sm" variant="secondary">Sign out</x-btn></form>
         </div>
     </div>
 
-    <div class="grid-kpis">
-        @can('admission.view')<x-kpi label="Active students" :value="number_format($kpis['students'])" />@endcan
+    {{-- Date-range toggle --}}
+    <div style="display:flex; align-items:center; gap: var(--space-3); flex-wrap:wrap;">
+        <div class="range-toggle" role="group" aria-label="Date range">
+            @foreach (['today' => 'Today', '7d' => '7 days', '30d' => '30 days', 'month' => 'This month', 'quarter' => 'Quarter', 'year' => 'This year'] as $key => $label)
+                <button type="button" wire:click="setRange('{{ $key }}')" aria-pressed="{{ $range === $key ? 'true' : 'false' }}">{{ $label }}</button>
+            @endforeach
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+            <input type="date" class="input" style="max-width:150px;" wire:model.live="from" aria-label="From date">
+            <span class="field__hint">to</span>
+            <input type="date" class="input" style="max-width:150px;" wire:model.live="to" aria-label="To date">
+        </div>
+        <span class="field__hint" style="margin-left:auto;">{{ $rangeLabel }}</span>
+    </div>
+
+    {{-- KPI strip --}}
+    <div class="kpi-strip">
+        @php($arrow = fn ($d) => $d > 0 ? '▲' : ($d < 0 ? '▼' : '—'))
+        @php($cls = fn ($d) => $d > 0 ? 'kpi__delta--up' : ($d < 0 ? 'kpi__delta--down' : ''))
         @can('fee.view')
-            <x-kpi label="Collected (month)" :value="paise_to_rupees($kpis['collected'])" :hint="'Today '.paise_to_rupees($kpis['collected_today'])" />
+            <div class="kpi kpi--trend">
+                <div class="kpi__label">Collected</div>
+                <div class="kpi__value">{{ paise_to_rupees($kpis['collected']) }}
+                    <span class="kpi__delta {{ $cls($kpis['collected_delta']) }}">{{ $arrow($kpis['collected_delta']) }} {{ abs($kpis['collected_delta']) }}%</span>
+                </div>
+                <div class="kpi__hint">vs previous period</div>
+            </div>
             <x-kpi label="Outstanding" :value="paise_to_rupees($kpis['outstanding'])" />
         @endcan
-        @can('attendance.view')<x-kpi label="Attendance" :value="$kpis['attendance'].'%'" />@endcan
+        @can('admission.view')
+            <div class="kpi kpi--trend">
+                <div class="kpi__label">New admissions</div>
+                <div class="kpi__value">{{ number_format($kpis['new_admissions']) }}
+                    <span class="kpi__delta {{ $cls($kpis['new_admissions_delta']) }}">{{ $arrow($kpis['new_admissions_delta']) }} {{ abs($kpis['new_admissions_delta']) }}%</span>
+                </div>
+                <div class="kpi__hint">in range</div>
+            </div>
+            <x-kpi label="Active students" :value="number_format($kpis['active_students'])" />
+        @endcan
         @can('enquiry.view')
-            <x-kpi label="Open enquiries" :value="number_format($kpis['open_enquiries'])" :hint="'Due today '.$kpis['due_today']" />
-            <x-kpi label="Conversion" :value="$kpis['conversion'].'%'" />
+            <div class="kpi kpi--trend">
+                <div class="kpi__label">New enquiries</div>
+                <div class="kpi__value">{{ number_format($kpis['new_enquiries']) }}
+                    <span class="kpi__delta {{ $cls($kpis['new_enquiries_delta']) }}">{{ $arrow($kpis['new_enquiries_delta']) }} {{ abs($kpis['new_enquiries_delta']) }}%</span>
+                </div>
+                <div class="kpi__hint">in range</div>
+            </div>
+        @endcan
+        @can('attendance.view')<x-kpi label="Attendance" :value="$kpis['attendance'].'%'" hint="overall" />@endcan
+    </div>
+
+    {{-- Charts --}}
+    <div class="chart-grid">
+        @can('fee.view')
+            <x-chart class="span-8" wire:key="c-collections-{{ $range }}-{{ $from }}-{{ $to }}" title="Collections over time" :config="$charts['collections']" :height="300" />
+            <x-chart class="span-4" wire:key="c-mode-{{ $range }}-{{ $from }}-{{ $to }}" title="Collections by mode" :config="$charts['mode']" :height="300" />
+        @endcan
+        @can('enquiry.view')
+            <x-chart class="span-6" wire:key="c-trend-{{ $range }}-{{ $from }}-{{ $to }}" title="Enquiries vs admissions" :config="$charts['funnelTrend']" />
+            <x-chart class="span-6" wire:key="c-funnel" title="Enquiry funnel" :config="$charts['funnel']" />
+        @endcan
+        @can('fee.view')
+            <x-chart class="span-6" wire:key="c-ageing" title="Outstanding ageing" hint="by invoice age" :config="$charts['ageing']" />
+        @endcan
+        @can('attendance.view')
+            <x-chart class="span-6" wire:key="c-att" title="Attendance by batch" :config="$charts['attendance']" />
         @endcan
     </div>
 
+    {{-- Tables --}}
     <div class="grid-cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items:start;">
         @can('admission.view')
             <x-card title="Recent admissions">
