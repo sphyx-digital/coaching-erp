@@ -29,7 +29,8 @@
                 @else
                     <x-data-table :head="['Student', 'Course', 'Status']">
                         @foreach ($recentAdmissions as $e)
-                            <tr><td>{{ $e->student?->name }}</td><td>{{ $e->course?->name }}</td>
+                            <tr class="is-clickable" tabindex="0" onclick="location.href='{{ url('/admissions?student='.$e->student_id) }}'">
+                                <td>{{ $e->student?->name }}</td><td>{{ $e->course?->name }}</td>
                                 <td><x-pill :variant="$e->status->pillVariant()">{{ $e->status->label() }}</x-pill></td></tr>
                         @endforeach
                     </x-data-table>
@@ -44,7 +45,8 @@
                 @else
                     <x-data-table :head="['Receipt', 'Student', ['label' => 'Amount', 'num' => true]]">
                         @foreach ($recentPayments as $p)
-                            <tr><td>{{ $p->receipt_number }}</td><td>{{ $p->student?->name }}</td>
+                            <tr class="is-clickable" tabindex="0" onclick="window.open('{{ route('receipts.show', $p->id) }}','_blank')">
+                                <td>{{ $p->receipt_number }}</td><td>{{ $p->student?->name }}</td>
                                 <td class="num">{{ paise_to_rupees($p->amount) }}</td></tr>
                         @endforeach
                     </x-data-table>
@@ -59,7 +61,8 @@
                 @else
                     <x-data-table :head="['Enquiry', 'Name', 'Course']">
                         @foreach ($dueFollowUps as $e)
-                            <tr><td>{{ $e->enquiry_number }}</td><td>{{ $e->name }}</td><td>{{ $e->course?->name ?: '—' }}</td></tr>
+                            <tr class="is-clickable" tabindex="0" onclick="location.href='{{ url('/enquiries?enquiry='.$e->id) }}'">
+                                <td>{{ $e->enquiry_number }}</td><td>{{ $e->name }}</td><td>{{ $e->course?->name ?: '—' }}</td></tr>
                         @endforeach
                     </x-data-table>
                 @endif

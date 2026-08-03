@@ -73,6 +73,11 @@ class AdmissionsManager extends Component
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('admission.view'), 403);
+
+        // Deep link from the dashboard: /admissions?student={id}
+        if (($sid = (int) request()->integer('student')) && Student::whereKey($sid)->exists()) {
+            $this->viewProfile($sid);
+        }
     }
 
     public function getIsMinorProperty(): bool

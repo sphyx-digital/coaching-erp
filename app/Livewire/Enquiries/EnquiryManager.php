@@ -52,6 +52,11 @@ class EnquiryManager extends Component
     public function mount(): void
     {
         abort_unless(Auth::user()?->can('enquiry.view'), 403);
+
+        // Deep link from the dashboard: /enquiries?enquiry={id}
+        if (($eid = (int) request()->integer('enquiry')) && Enquiry::whereKey($eid)->exists()) {
+            $this->view($eid);
+        }
     }
 
     public function view(int $id): void

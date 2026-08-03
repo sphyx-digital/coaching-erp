@@ -16,11 +16,14 @@ use App\Models\AcademicSession;
 use App\Models\Batch;
 use App\Models\Branch;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Institute;
 use App\Models\MessageLog;
 use App\Models\Staff;
+use App\Models\Student;
 use App\Models\StudyMaterial;
 use App\Models\User;
+use App\Services\Enquiries\EnquiryService;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -140,6 +143,27 @@ class DrawerRolloutTest extends TestCase
 
         $this->assertTrue($m1->fresh()->is_published);
         $this->assertTrue($m2->fresh()->is_published);
+    }
+
+    public function test_dashboard_deeplink_opens_admission_and_enquiry(): void
+    {
+        $branch = Branch::create(['institute_id' => $this->institute->id, 'name' => 'Main', 'code' => 'MN']);
+        $course = Course::create(['institute_id' => $this->institute->id, 'name' => 'JEE', 'code' => 'JEE']);
+        $student = Student::create(['institute_id' => $this->institute->id, 'branch_id' => $branch->id, 'name' => 'Deeplink Student', 'admission_number' => 'DL-1']);
+        Enrollment::create(['institute_id' => $this->institute->id, 'branch_id' => $branch->id, 'academic_session_id' => AcademicSession::first()->id, 'student_id' => $student->id, 'course_id' => $course->id, 'status' => 'active']);
+
+        // Admissions deep link opens the profile drawer (drawer-only "Guardians" section).
+        $this->actingAs($this->admin)->get('/admissions?student='.$student->id)
+            ->assertOk()->assertSee('Guardians');
+
+        $enquiry = app(EnquiryService::class)->create([
+            'institute_id' => $this->institute->id, 'branch_id' => $branch->id,
+            'academic_session_id' => AcademicSession::first()->id, 'name' => 'Deep Lead', 'phone' => '9000000001',
+        ]);
+
+        // Enquiry deep link opens the drawer (drawer-only "Activity" section).
+        $this->actingAs($this->admin)->get('/enquiries?enquiry='.$enquiry->id)
+            ->assertOk()->assertSee('Activity');
     }
 
     public function test_message_log_row_opens_drawer(): void
