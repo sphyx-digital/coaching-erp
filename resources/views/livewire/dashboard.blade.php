@@ -4,7 +4,7 @@
         <div style="display:flex; gap: var(--space-2); align-items:center; flex-wrap:wrap;">
             <span class="field__hint">{{ $user->name }}</span>
             @foreach ($user->getRoleNames() as $r)<x-pill variant="info">{{ $r }}</x-pill>@endforeach
-            <form method="POST" action="{{ route('logout') }}">@csrf<x-btn size="sm" variant="secondary">Sign out</x-btn></form>
+            <form method="POST" action="{{ route('logout') }}">@csrf<x-btn type="submit" size="sm" variant="secondary">Sign out</x-btn></form>
         </div>
     </div>
 
