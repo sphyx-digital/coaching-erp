@@ -50,7 +50,7 @@ class PublicSiteController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
-            'phone' => ['required', 'string', 'regex:/^[0-9+\-\s]{6,20}$/'],
+            'phone' => ['required', 'string', 'regex:/^[6-9][0-9]{9}$/'],
             'email' => ['nullable', 'email', 'max:150'],
             'branch_id' => ['required', 'integer'],
             'course_id' => ['nullable', 'integer'],

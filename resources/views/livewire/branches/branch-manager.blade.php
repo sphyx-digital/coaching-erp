@@ -71,7 +71,7 @@
             <div class="form-grid">
                 <x-field label="Phone" name="data.phone" wire:model="data.phone" numeric maxlength="15" />
                 <x-field label="Alternate phone" name="data.alt_phone" wire:model="data.alt_phone" numeric maxlength="15" />
-                <x-field label="WhatsApp" name="data.whatsapp" wire:model="data.whatsapp" numeric maxlength="15" />
+                <x-field label="WhatsApp" name="data.whatsapp" wire:model="data.whatsapp" mobile />
                 <x-field label="Email" type="email" name="data.email" wire:model="data.email" />
                 <x-field label="Support email" type="email" name="data.support_email" wire:model="data.support_email" />
             </div>
@@ -98,7 +98,7 @@
             <div class="form-section__title">Management & legal</div>
             <div class="form-grid">
                 <x-field label="Manager name" name="data.manager_name" wire:model="data.manager_name" />
-                <x-field label="Manager phone" name="data.manager_phone" wire:model="data.manager_phone" numeric maxlength="15" />
+                <x-field label="Manager phone" name="data.manager_phone" wire:model="data.manager_phone" mobile />
                 <x-field label="Manager email" type="email" name="data.manager_email" wire:model="data.manager_email" />
                 <x-field label="GSTIN" name="data.gstin" wire:model="data.gstin" />
                 <x-field label="PAN" name="data.pan" wire:model="data.pan" />

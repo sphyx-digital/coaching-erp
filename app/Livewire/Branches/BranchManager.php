@@ -92,8 +92,8 @@ class BranchManager extends Component
             'data.pincode' => ['nullable', 'regex:/^[0-9]{6}$/'],
             'data.phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
             'data.alt_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
-            'data.whatsapp' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
-            'data.manager_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+            'data.whatsapp' => ['nullable', 'regex:/^[6-9][0-9]{9}$/'],
+            'data.manager_phone' => ['nullable', 'regex:/^[6-9][0-9]{9}$/'],
         ], [
             'data.*.regex' => 'Enter digits only.',
         ]);

@@ -89,10 +89,10 @@ class EnquiryManager extends Component
 
         $data = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+            'phone' => ['nullable', 'regex:/^[6-9][0-9]{9}$/'],
             'email' => ['nullable', 'email'],
             'guardian_name' => ['nullable', 'string', 'max:255'],
-            'guardian_phone' => ['nullable', 'regex:/^[0-9]{6,15}$/'],
+            'guardian_phone' => ['nullable', 'regex:/^[6-9][0-9]{9}$/'],
             'source' => ['nullable', 'string', 'max:255'],
             'branch_id' => ['required', 'exists:branches,id'],
             'course_id' => ['nullable', 'exists:courses,id'],

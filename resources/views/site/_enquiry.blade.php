@@ -16,8 +16,9 @@
             </div>
             <div class="field">
                 <label class="field__label" for="phone">Mobile number <span style="color:var(--danger)">*</span></label>
-                <input class="input" id="phone" name="phone" type="tel" inputmode="numeric" required maxlength="15"
-                       oninput="this.value=this.value.replace(/[^0-9]/g,'')" value="{{ old('phone') }}">
+                <input class="input" id="phone" name="phone" type="tel" inputmode="numeric" required maxlength="10"
+                       pattern="[6-9][0-9]{9}" title="Enter a 10-digit Indian mobile number starting with 6-9"
+                       oninput="this.value=this.value.replace(/\D/g,'').replace(/^[0-5]+/,'').slice(0,10)" value="{{ old('phone') }}">
                 @error('phone')<span class="field__error">{{ $message }}</span>@enderror
             </div>
             <div class="field">
